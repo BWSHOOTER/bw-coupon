@@ -4,7 +4,62 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!--1.项目坐标-->
     <groupId>com.bw.coupon</groupId>
     <artifactId>bw-coupon</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!--2.项目名称和描述（非必选）-->
+    <name>bw-coupon</name>
+    <description></description>
+    <!--3.当前项目打包类型
+        默认为jar，对于聚合项目的父模块来说，必须为pom-->
+    <packaging>pom</packaging>
+    <!--4.表明是一个SpringBoot工程-->
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.3.2.RELEASE</version>
+    </parent>
+    <!--5.通用属性配置（下面springcloud用到）-->
+    <properties>
+        <spring-cloud.version>Greenwish.RELEASE</spring-cloud.version>
+    </properties>
+    <!--6.依赖-->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <!--6.依赖管理-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <scope>pom</scope>
+                <type>import</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--远程仓库依赖（SpringCloud不在Maven仓库中）-->
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestones</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 </project>
