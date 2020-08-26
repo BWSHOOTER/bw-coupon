@@ -8,35 +8,52 @@
     <groupId>com.bw.coupon</groupId>
     <artifactId>bw-coupon</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <!-- 有子模块后自动生成 -->
+    <modules>
+        <module>coupon-eureka</module>
+    </modules>
+
     <!--2.项目名称和描述（非必选）-->
     <name>bw-coupon</name>
     <description></description>
+
     <!--3.当前项目打包类型
         默认为jar，对于聚合项目的父模块来说，必须为pom-->
     <packaging>pom</packaging>
+
     <!--4.表明是一个SpringBoot工程-->
     <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>2.3.2.RELEASE</version>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
     </parent>
-    <!--5.通用属性配置（下面springcloud用到）-->
+
+    <!--5.通用属性配置-->
     <properties>
         <spring-cloud.version>Greenwish.RELEASE</spring-cloud.version>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
+
+
     <!--6.依赖-->
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>${lombok.version}</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
+
     <!--6.依赖管理-->
     <dependencyManagement>
         <dependencies>
@@ -49,6 +66,9 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+
 
     <!--远程仓库依赖（SpringCloud不在Maven仓库中）-->
     <repositories>
