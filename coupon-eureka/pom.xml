@@ -21,11 +21,11 @@
     <description>Spring Cloud Eureka For Coupon</description>
 
     <!-- eureka server: 提供服务发现与服务注册 -->
+    <!-- 不用指定版本，因为SpringCloud指定后自动匹配 -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-            <version>2.2.4.RELEASE</version>
         </dependency>
     </dependencies>
 

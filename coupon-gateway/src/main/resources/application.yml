@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: coupon-gateway
+
+server:
+  port: 9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8000/eureka/
+
+      # 是否从 Eureka Server获取注册信息, 默认即为true，可省略
+      fetch-registry: true
+      # 是否将自己注册到 Eureka Server, 默认即为true，可省略
+      register-with-eureka: true

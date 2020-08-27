@@ -12,11 +12,12 @@
     <!-- 有子模块后自动生成 -->
     <modules>
         <module>coupon-eureka</module>
+        <module>coupon-gateway</module>
     </modules>
 
     <!--2.项目名称和描述（非必选）-->
     <name>bw-coupon</name>
-    <description></description>
+    <description>SpringCloud Project For BW Coupon</description>
 
     <!--3.当前项目打包类型
         默认为jar，对于聚合项目的父模块来说，必须为pom-->
@@ -31,8 +32,8 @@
 
     <!--5.通用属性配置-->
     <properties>
-        <spring-cloud.version>Greenwish.RELEASE</spring-cloud.version>
-        <lombok.version>1.18.12</lombok.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <lombok.version>1.16.18</lombok.version>
     </properties>
 
 
@@ -61,8 +62,8 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
-                <scope>pom</scope>
-                <type>import</type>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
