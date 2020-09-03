@@ -8,8 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="coupon-common" />
-        <module name="coupon-gateway" />
         <module name="coupon-eureka" />
+        <module name="coupon-gateway" />
+        <module name="coupon-template" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,6 +20,7 @@
       <module name="coupon-eureka" options="-parameters" />
       <module name="coupon-gateway" options="-parameters" />
       <module name="coupon-service" options="-parameters" />
+      <module name="coupon-template" options="-parameters" />
     </option>
   </component>
 </project>
