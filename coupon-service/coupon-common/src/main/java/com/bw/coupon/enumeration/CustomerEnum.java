@@ -3,12 +3,24 @@ package com.bw.coupon.enumeration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 @Getter
 @AllArgsConstructor
 public enum CustomerEnum {
-    NewCustomer("001","新用户"),
-    OldCustomer("002","老用户");
+    AllCustomer(920,"所有用户"),
+    NewCustomer(921,"老用户"),
+    OldCustomer(922,"新用户");
 
-    private String code;
+    private Integer code;
     private String desc;
+    public static CustomerEnum of(Integer code){
+        if(code==null)
+            throw new IllegalArgumentException("Enum CustomerEnum code is NULL!");
+
+        return Stream.of(values())
+                .filter(bean -> bean.code.equals(code))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Enum CustomerEnum code " + code + " is NOT EXISTS!"));
+    }
 }
