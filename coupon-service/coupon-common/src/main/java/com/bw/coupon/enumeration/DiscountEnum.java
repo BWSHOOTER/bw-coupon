@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.util.stream.Stream;
 
+/**
+ * 枚举：折扣规则类型
+ **/
 @Getter
 @AllArgsConstructor
 public enum DiscountEnum {

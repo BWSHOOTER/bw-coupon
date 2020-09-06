@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.util.stream.Stream;
 
+/**
+ * 枚举：可用用户类型
+ **/
 @Getter
 @AllArgsConstructor
 public enum CustomerEnum {

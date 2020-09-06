@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @Description: 统一响应对象定义
+ * @Description: 统一响应对象
  * @Author: BaoWei
  * @Date: 9/2 0002 2:03
  **/
