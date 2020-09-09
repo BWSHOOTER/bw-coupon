@@ -14,13 +14,16 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CouponRuleTemplate {
+public class CouponTemplateRuleVo {
 
     private ExpirationRuleTemplate expiration;
     private DiscountRuleTemplate discount;
     private CustomerRuleTemplate customer;
     private DistributeRuleTemplate distribute;
 
+    public boolean validate(){
+        return true;
+    }
 
     /**
      * 过期规则

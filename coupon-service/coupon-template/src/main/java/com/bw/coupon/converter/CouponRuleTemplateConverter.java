@@ -1,6 +1,6 @@
 package com.bw.coupon.converter;
 
-import com.bw.coupon.vo.CouponRuleTemplate;
+import com.bw.coupon.vo.CouponTemplateRuleVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,14 @@ import javax.persistence.Converter;
 import java.io.IOException;
 
 @Converter
-public class CouponRuleTemplateConverter implements AttributeConverter<CouponRuleTemplate,String> {
+public class CouponRuleTemplateConverter implements AttributeConverter<CouponTemplateRuleVo,String> {
     @Autowired
     private ObjectMapper mapper;
 
     @Override
-    public String convertToDatabaseColumn(CouponRuleTemplate couponRuleTemplate) {
+    public String convertToDatabaseColumn(CouponTemplateRuleVo couponTemplateRuleVo) {
         try {
-            return mapper.writeValueAsString(couponRuleTemplate);
+            return mapper.writeValueAsString(couponTemplateRuleVo);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -26,9 +26,9 @@ public class CouponRuleTemplateConverter implements AttributeConverter<CouponRul
     }
 
     @Override
-    public CouponRuleTemplate convertToEntityAttribute(String s) {
+    public CouponTemplateRuleVo convertToEntityAttribute(String s) {
         try {
-            return mapper.readValue(s,CouponRuleTemplate.class);
+            return mapper.readValue(s, CouponTemplateRuleVo.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

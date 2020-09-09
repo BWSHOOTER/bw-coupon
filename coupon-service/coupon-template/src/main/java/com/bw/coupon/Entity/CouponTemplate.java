@@ -9,7 +9,7 @@ import com.bw.coupon.enumeration.DiscountEnum;
 import com.bw.coupon.enumeration.DistributeEnum;
 import com.bw.coupon.enumeration.ProductLineEnum;
 import com.bw.coupon.serialization.CouponTemplateSerialize;
-import com.bw.coupon.vo.CouponRuleTemplate;
+import com.bw.coupon.vo.CouponTemplateRuleVo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -100,5 +101,33 @@ public class CouponTemplate implements Serializable {
     /** 规则 */
     @Column(name = "rule", nullable = false)
     @Convert(converter = CouponRuleTemplateConverter.class)
-    private CouponRuleTemplate rule;
+    private CouponTemplateRuleVo rule;
+
+    /**
+     * 自定义构造函数
+     * */
+    public CouponTemplate(String name,
+                          String logo,
+                          String intro,
+                          Integer discount,
+                          Integer productLine, Integer count, Long userId,
+                          Integer distribute,
+                          Integer customer, CouponTemplateRuleVo rule) {
+
+        this.available = false;
+        this.expired = false;
+        this.name = name;
+        this.logo = logo;
+        this.intro = intro;
+        this.discount = DiscountEnum.of(discount);
+        this.productLine = ProductLineEnum.of(productLine);
+        this.count = count;
+        this.userId = userId;
+        this.distribute = DistributeEnum.of(distribute);
+        // 优惠券模板唯一编码 = 4(产品线和类型) + 8(日期: 20190101) + id(扩充为4位)
+        this.key = productLine.toString() + discount +
+                new SimpleDateFormat("yyyyMMdd").format(new Date());
+        this.customer = CustomerEnum.of(customer);
+        this.rule = rule;
+    }
 }
