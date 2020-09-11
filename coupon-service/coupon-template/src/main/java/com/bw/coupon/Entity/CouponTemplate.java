@@ -67,12 +67,12 @@ public class CouponTemplate implements Serializable {
     private DiscountEnum discount;
 
     /** 8.产品线 */
-    @Column(name = "product", nullable = false)
+    @Column(name = "product_line", nullable = false)
     @Convert(converter = ProductLineEnumConverter.class)
     private ProductLineEnum productLine;
 
     /** 9.总数 */
-    @Column(name = "count", nullable = false)
+    @Column(name = "coupon_count", nullable = false)
     private Integer count;
 
     /** 10.创建时间 */
@@ -80,25 +80,25 @@ public class CouponTemplate implements Serializable {
     @Column(name = "create_time", nullable = false)
     private Date createTime;
 
-    /** 创建用户 */
+    /** 11.创建用户 */
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    /** 编码 */
+    /** 12.编码 */
     @Column(name = "key", nullable = false)
     private String key;
 
-    /** 发放方式 */
+    /** 13.发放方式 */
     @Column(name = "distribute", nullable = false)
     @Convert(converter = DiscountEnumConverter.class)
     private DistributeEnum distribute;
 
-    /** 适用用户 */
+    /** 14.适用用户 */
     @Column(name = "customer", nullable = false)
     @Convert(converter = CustomerEnumConverter.class)
     private CustomerEnum customer;
 
-    /** 规则 */
+    /** 15.规则 */
     @Column(name = "rule", nullable = false)
     @Convert(converter = CouponRuleTemplateConverter.class)
     private CouponTemplateRuleVo rule;

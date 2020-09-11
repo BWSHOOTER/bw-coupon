@@ -32,7 +32,7 @@ public class CouponTemplateRuleVo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ExpirationRuleTemplate{
-        // 面向用户类型，对应DiscountEnum的code
+        // 对应ExpirationEnum的code
         private Integer type;
         private Long gap;
         private Long deadLine;
@@ -45,10 +45,10 @@ public class CouponTemplateRuleVo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DiscountRuleTemplate{
+        // 对应DiscountEnum的code
+        private Integer type;
         private Integer quota;
         private Integer base;
-        // 面向用户类型，对应DiscountEnum的code
-        private Integer type;
     }
 
     /**
@@ -58,9 +58,8 @@ public class CouponTemplateRuleVo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CustomerRuleTemplate{
-        // 面向用户类型，对应CustomerEnum的code
+        // 对应CustomerEnum的code
         private Integer type;
-
     }
 
     /**
@@ -70,7 +69,7 @@ public class CouponTemplateRuleVo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DistributeRuleTemplate{
-        // 发放类型，对应DistributeEnum的code
+        // 对应DistributeEnum的code
         private Integer type;
 
     }

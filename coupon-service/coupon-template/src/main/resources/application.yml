@@ -17,7 +17,8 @@ spring:
     open-in-view: false
   datasource:
     # 数据源
-    url: jdbc:mysql://127.0.0.1:3308/coupon_data?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+    # autoReconnect=true&
+    url: jdbc:mysql://127.0.0.1:3308/coupon_data?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=CTT
     username: root
     password: 123456
     # 连接池，此处也为默认值
@@ -43,7 +44,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://server1:8000/eureka/
+      defaultZone: http://127.0.0.1:8000/eureka/
 
 # ------------------------------------------------------------------------------------------------------
 

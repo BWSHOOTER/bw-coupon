@@ -15,5 +15,9 @@ public interface CouponTemplateDao
     /** 根据模板名称查询模板 */
     CouponTemplate findByName(String name);
     /** 根据available、expired查询模板 */
-    List<CouponTemplate> findAllByAvailableAndAndExpired(Boolean available, Boolean expired);
+    List<CouponTemplate> findAllByAvailableAndExpired(Boolean available, Boolean expired);
+    /** 根据expired查询模板 */
+    List<CouponTemplate> findAllByExpired(Boolean expired);
+    /** 根据expired查询模板 */
+    //int saveAll(Boolean expired);
 }
