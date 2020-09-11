@@ -38,7 +38,7 @@ public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
         generator.writeStringField("createTime",
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(template.getCreateTime()));
         generator.writeStringField("userId", template.getUserId().toString());
-        generator.writeStringField("key",
+        generator.writeStringField("sn",
                 template.getKey() + String.format("%04d", template.getId()));
         generator.writeStringField("customer",
                 template.getCustomer().getDesc());

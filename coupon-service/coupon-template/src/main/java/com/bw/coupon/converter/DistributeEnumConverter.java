@@ -1,6 +1,5 @@
 package com.bw.coupon.converter;
 
-import com.bw.coupon.enumeration.DiscountEnum;
 import com.bw.coupon.enumeration.DistributeEnum;
 
 import javax.persistence.AttributeConverter;

@@ -29,8 +29,8 @@ public class CouponTemplateSDK {
     /** 产品线 */
     private Integer productLine;
 
-    /** 优惠券分类 */
-    private String key;
+    /** 优惠券编号 */
+    private String sn;
 
     /** 目标用户 */
     private Integer customer;

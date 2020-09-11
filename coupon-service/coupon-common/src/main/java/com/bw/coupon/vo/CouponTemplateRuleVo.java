@@ -1,9 +1,11 @@
 package com.bw.coupon.vo;
 
 import com.bw.coupon.enumeration.DistributeEnum;
+import com.bw.coupon.enumeration.ExpirationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Date;
 
@@ -36,6 +38,18 @@ public class CouponTemplateRuleVo {
         private Integer type;
         private Long gap;
         private Long deadLine;
+
+        public ExpirationRuleTemplate(Integer type,Long mills){
+            this.type = type;
+            if(type == ExpirationEnum.RegularExpiration.getCode()){
+                this.deadLine = mills;
+            }
+            else if(type == ExpirationEnum.ShiftExpiration.getCode()){
+                Long dll = new Date().getTime() + mills;
+                Date dl = new Date(dll);
+                this.deadLine = DateUtils.addMilliseconds(dl,1).getTime();
+            }
+        }
     }
 
     /**

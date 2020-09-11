@@ -26,7 +26,7 @@ public interface ITemplateBaseService {
     /**
      * 获取模板 ids 到 CouponTemplateSDK 的映射
      * ids 模板 ids
-     * Map<key: 模板 id， value: CouponTemplateSDK>
+     * Map<sn: 模板 id， value: CouponTemplateSDK>
      * */
     Map<Integer, CouponTemplateSDK> findIds2TemplateSDK(Collection<Integer> ids);
 

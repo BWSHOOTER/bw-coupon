@@ -1,9 +1,6 @@
 package com.bw.coupon.Entity;
 
-import com.bw.coupon.converter.CouponRuleTemplateConverter;
-import com.bw.coupon.converter.CustomerEnumConverter;
-import com.bw.coupon.converter.DiscountEnumConverter;
-import com.bw.coupon.converter.ProductLineEnumConverter;
+import com.bw.coupon.converter.*;
 import com.bw.coupon.enumeration.CustomerEnum;
 import com.bw.coupon.enumeration.DiscountEnum;
 import com.bw.coupon.enumeration.DistributeEnum;
@@ -49,7 +46,7 @@ public class CouponTemplate implements Serializable {
     private Boolean expired;
 
     /** 4.名称 */
-    @Column(name = "name", nullable = false)
+    @Column(name = "coupon_name", nullable = false)
     private String name;
 
     /** 5.logo */
@@ -85,12 +82,12 @@ public class CouponTemplate implements Serializable {
     private Long userId;
 
     /** 12.编码 */
-    @Column(name = "key", nullable = false)
+    @Column(name = "sn", nullable = false)
     private String key;
 
     /** 13.发放方式 */
     @Column(name = "distribute", nullable = false)
-    @Convert(converter = DiscountEnumConverter.class)
+    @Convert(converter = DistributeEnumConverter.class)
     private DistributeEnum distribute;
 
     /** 14.适用用户 */
