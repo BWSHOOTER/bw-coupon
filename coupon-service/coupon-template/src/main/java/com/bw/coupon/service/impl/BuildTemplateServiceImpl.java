@@ -9,6 +9,7 @@ import com.bw.coupon.vo.TemplateRequestVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  **/
 @Data
 @NoArgsConstructor
+@Service
 public class BuildTemplateServiceImpl implements IBuildTemplateService {
     /** 异步服务 */
     private IAsyncService asyncService;

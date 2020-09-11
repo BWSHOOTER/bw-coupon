@@ -19,7 +19,7 @@ import java.util.Map;
  **/
 @Slf4j
 @RestController
-public class HealthCheck {
+public class HealthCheckController {
     /**
      * 服务发现客户端
      * 可以获得Eureka上注册的微服务信息
@@ -30,7 +30,7 @@ public class HealthCheck {
      * 提供了获取服务id的方法
      **/
     private final Registration registration;
-    public HealthCheck(DiscoveryClient discoveryClient, Registration registration) {
+    public HealthCheckController(DiscoveryClient discoveryClient, Registration registration) {
         this.discoveryClient = discoveryClient;
         this.registration = registration;
     }
@@ -38,6 +38,7 @@ public class HealthCheck {
     /**
      * 健康检查接口
      * 127.0.0.1:7001/coupon-template/health
+     * 127.0.0.1:9000/bw-coupon-zuul/template/health
      **/
     @GetMapping("/health")
     public String health(){

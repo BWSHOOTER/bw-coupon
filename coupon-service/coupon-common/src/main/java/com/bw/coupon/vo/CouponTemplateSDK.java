@@ -23,11 +23,14 @@ public class CouponTemplateSDK {
     /** 优惠券描述 */
     private String intro;
 
+    /** 折扣方式 */
+    private Integer discount;
+
     /** 产品线 */
     private Integer productLine;
 
     /** 优惠券分类 */
-    private String discount;
+    private String key;
 
     /** 目标用户 */
     private Integer customer;
