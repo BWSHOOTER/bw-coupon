@@ -2,7 +2,9 @@ package com.bw.coupon.entity;
 
 import com.bw.coupon.converter.CouponStatusEnumConverter;
 import com.bw.coupon.enumeration.CouponStatusEnum;
+import com.bw.coupon.serialization.CouponSerialize;
 import com.bw.coupon.vo.CouponTemplateSDK;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,12 +14,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "coupon")
+@JsonSerialize(using = CouponSerialize.class)
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
