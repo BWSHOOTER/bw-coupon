@@ -9,7 +9,7 @@ import java.util.List;
  *  JpaRepository<X,Y>
  *     X：实体类型
  *     Y：主键类型
- **/
+ */
 public interface CouponTemplateDao
         extends JpaRepository<CouponTemplate, Integer> {
     /** 根据模板名称查询模板 */

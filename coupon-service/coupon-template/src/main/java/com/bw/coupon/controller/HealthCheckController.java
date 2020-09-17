@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * 健康检查接口
- **/
+ */
 @Slf4j
 @RestController
 public class HealthCheckController {
@@ -28,7 +28,7 @@ public class HealthCheckController {
     /**
      * 服务注册接口
      * 提供了获取服务id的方法
-     **/
+     */
     private final Registration registration;
     public HealthCheckController(DiscoveryClient discoveryClient, Registration registration) {
         this.discoveryClient = discoveryClient;
@@ -39,7 +39,7 @@ public class HealthCheckController {
      * 健康检查接口
      * 127.0.0.1:7001/coupon-template/health
      * 127.0.0.1:9000/bw-coupon-zuul/template/health
-     **/
+     */
     @GetMapping("/health")
     public String health(){
         log.debug("view health api");
@@ -49,7 +49,7 @@ public class HealthCheckController {
     /**
      * 异常检查接口
      * 127.0.0.1:7001/coupon-template/exception
-     **/
+     */
     @GetMapping("/exception")
     public String exception() throws CommonException{
         log.debug("view exception api");
@@ -58,7 +58,7 @@ public class HealthCheckController {
     /**
      * 获取Eureka Server上的微服务元信息
      * 127.0.0.1:7001/coupon-template/info
-     **/
+     */
     @GetMapping("/info")
     public List<Map<String,Object>> info(){
         // 大约需要等待两分钟时间才能获取到注册信息

@@ -6,7 +6,7 @@ import com.bw.coupon.enumeration.DiscountEnum;
 import com.bw.coupon.enumeration.DistributeEnum;
 import com.bw.coupon.enumeration.ProductLineEnum;
 import com.bw.coupon.serialization.CouponTemplateSerialize;
-import com.bw.coupon.vo.CouponTemplateRuleVo;
+import com.bw.coupon.vo.TemplateRuleVo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -98,7 +98,7 @@ public class CouponTemplate implements Serializable {
     /** 15.规则 */
     @Column(name = "rule", nullable = false)
     @Convert(converter = CouponRuleTemplateConverter.class)
-    private CouponTemplateRuleVo rule;
+    private TemplateRuleVo rule;
 
     /**
      * 自定义构造函数
@@ -109,7 +109,7 @@ public class CouponTemplate implements Serializable {
                           Integer discount,
                           Integer productLine, Integer count, Long userId,
                           Integer distribute,
-                          Integer customer, CouponTemplateRuleVo rule) {
+                          Integer customer, TemplateRuleVo rule) {
 
         this.available = false;
         this.expired = false;

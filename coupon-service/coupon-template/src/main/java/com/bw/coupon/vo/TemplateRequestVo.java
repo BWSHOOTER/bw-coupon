@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 优惠券模板创建请求对象
  * VO：Value Object 通常用于service层之间传递对象
- **/
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class TemplateRequestVo {
     private Integer distribute;
     private Long userId;
     private Integer customer;
-    private CouponTemplateRuleVo rule;
+    private TemplateRuleVo rule;
 
     /** 对象合法性校验 */
     public boolean validate(){

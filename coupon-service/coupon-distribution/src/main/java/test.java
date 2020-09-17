@@ -1,7 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.bw.coupon.entity.Coupon;
-import com.bw.coupon.vo.CouponTemplateRuleVo;
-import com.bw.coupon.vo.CouponTemplateRuleVo.*;
+import com.bw.coupon.vo.TemplateRuleVo.*;
 
 public class test {
     public static void main(String[] args) {

@@ -10,7 +10,7 @@ import javax.persistence.Converter;
  * AttributeConverter<X,Y>
  *     X：实体属性的类型
  *     Y：数据库字段类型
- **/
+ */
 
 @Converter
 public class ProductLineEnumConverter implements AttributeConverter<ProductLineEnum, Integer> {

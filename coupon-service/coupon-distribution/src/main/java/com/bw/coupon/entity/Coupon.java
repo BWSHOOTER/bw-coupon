@@ -3,7 +3,7 @@ package com.bw.coupon.entity;
 import com.bw.coupon.converter.CouponStatusEnumConverter;
 import com.bw.coupon.enumeration.CouponStatusEnum;
 import com.bw.coupon.serialization.CouponSerialize;
-import com.bw.coupon.vo.CouponTemplateSDK;
+import com.bw.coupon.vo.TemplateSDK;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,7 +53,7 @@ public class Coupon {
 
     /** 用户优惠券对应的模板信息 */
     @Transient  // 表示不为当前表的某个列，但是需要定义在这里，方便操作
-    private CouponTemplateSDK templateSDK;
+    private TemplateSDK templateSDK;
 
     /**
      * 返回一个无效的 Coupon 对象
@@ -66,7 +66,7 @@ public class Coupon {
 
     /**
      * 构造优惠券
-     **/
+     */
     public Coupon(Integer templateId, Long userId, String couponCode,
                   CouponStatusEnum status) {
         this.templateId = templateId;

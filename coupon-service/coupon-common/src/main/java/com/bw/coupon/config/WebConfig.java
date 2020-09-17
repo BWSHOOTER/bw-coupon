@@ -1,4 +1,4 @@
-package com.bw.coupon.conf;
+package com.bw.coupon.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,7 +16,7 @@ import java.util.List;
  * 直接指定，不用选择
  */
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     //这里的converters对应当前系统中所有的消息转换器
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

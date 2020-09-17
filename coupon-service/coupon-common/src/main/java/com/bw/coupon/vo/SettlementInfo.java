@@ -13,7 +13,7 @@ import java.util.List;
  *  2. 商品信息(列表)
  *  3. 优惠券列表
  *  4. 结算结果金额
- **/
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class SettlementInfo {
 
     /** 是否使结算生效, 即核销
      *  true：核销  false：结算
-     **/
+     */
     private Boolean employ;
 
     /** 结果结算金额 */
@@ -37,7 +37,7 @@ public class SettlementInfo {
 
     /**
      * 优惠券和模板信息
-     **/
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -45,7 +45,7 @@ public class SettlementInfo {
         /** Coupon 的主键 */
         private Integer id;
         /** 优惠券对应的模板对象 */
-        private CouponTemplateSDK template;
+        private TemplateSDK template;
     }
 }
 

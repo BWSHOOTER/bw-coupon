@@ -2,8 +2,7 @@ package com.bw.coupon.Schedule;
 
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.dao.CouponTemplateDao;
-import com.bw.coupon.vo.CouponTemplateRuleVo;
-import lombok.Data;
+import com.bw.coupon.vo.TemplateRuleVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,13 +10,12 @@ import org.springframework.stereotype.Component;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 定时清理已过期的优惠券模板
- **/
+ */
 @Slf4j
 @Component
 public class ScheduledTask {
@@ -41,7 +39,7 @@ public class ScheduledTask {
         List<CouponTemplate> expiredTemplates = new ArrayList<>(templates.size());
         for (CouponTemplate t: templates) {
             // 根据优惠券模板规则中的 "过期规则" 校验模板是否过期
-            CouponTemplateRuleVo rule = t.getRule();
+            TemplateRuleVo rule = t.getRule();
             if (rule.getExpiration().getDeadLine() < cur.getTime()) {
                 t.setExpired(true);
                 expiredTemplates.add(t);

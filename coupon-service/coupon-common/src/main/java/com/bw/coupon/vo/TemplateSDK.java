@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 /**
  * 微服务之间用的优惠券模板信息定义
- **/
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CouponTemplateSDK {
+public class TemplateSDK {
     /** 优惠券模板主键 */
     private Integer id;
 
@@ -36,5 +36,5 @@ public class CouponTemplateSDK {
     private Integer customer;
 
     /** 优惠券规则 */
-    private CouponTemplateRuleVo rule;
+    private TemplateRuleVo rule;
 }

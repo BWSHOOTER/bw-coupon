@@ -7,7 +7,7 @@ import javax.persistence.Converter;
 
 /**
  * 适用用户类型枚举的转换器
- **/
+ */
 @Converter
 public class CustomerEnumConverter  implements AttributeConverter<CustomerEnum, Integer> {
     /** 将X转换为Y存储到数据库中（插入和更新时执行的动作） */

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 /**
  * 枚举：有效期规则类型
- **/
+ */
 @Getter
 @AllArgsConstructor
 public enum ExpirationEnum {

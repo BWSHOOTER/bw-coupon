@@ -69,10 +69,7 @@
         </dependencies>
     </dependencyManagement>
 
-
-
-
-    <!--远程仓库依赖（SpringCloud不在Maven仓库中）-->
+        <!--远程仓库依赖（SpringCloud不在Maven仓库中）-->
     <repositories>
         <repository>
             <id>spring-milestones</id>

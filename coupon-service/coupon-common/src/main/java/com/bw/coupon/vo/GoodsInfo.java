@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * fake 商品信息
- **/
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

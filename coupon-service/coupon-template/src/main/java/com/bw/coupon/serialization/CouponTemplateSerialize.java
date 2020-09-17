@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * 优惠券模板自定义序列化器
- **/
+ */
 
 public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
     @Autowired

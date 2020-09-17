@@ -2,9 +2,7 @@ package com.bw.coupon.serialization;
 
 
 //import com.alibaba.fastjson.JSON;
-import com.bw.coupon.conf.JacksonConfig;
 import com.bw.coupon.entity.Coupon;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +10,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 /**
  * 优惠券实体类自定义序列化器

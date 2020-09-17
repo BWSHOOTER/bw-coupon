@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 /**
  * 枚举：发放方式
- **/
+ */
 @Getter
 @AllArgsConstructor
 public enum DistributeEnum {

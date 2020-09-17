@@ -66,8 +66,6 @@ public class AsyncServiceImpl implements IAsyncService {
      *  前四位: 产品线 + 类型
      *  中间六位: 日期随机(190101)
      *  后八位: 0 ~ 9 随机数构成
-     * @param template {@link CouponTemplate} 实体类
-     * @return Set<String> 与 template.count 相同个数的优惠券码
      */
     @SuppressWarnings("all")
     private Set<String> buildCouponCode(CouponTemplate template) {

@@ -2,9 +2,9 @@ package com.bw.coupon.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.bw.coupon.vo.CouponTemplateRuleVo.*;
+import com.bw.coupon.vo.TemplateRuleVo.*;
 import com.bw.coupon.enumeration.*;
-import com.bw.coupon.vo.CouponTemplateRuleVo;
+import com.bw.coupon.vo.TemplateRuleVo;
 import com.bw.coupon.vo.TemplateRequestVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import java.util.Date;
 
 /**
  * 构造模板服务测试
- **/
+ */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class BuildTemplateTest {
@@ -33,7 +33,7 @@ public class BuildTemplateTest {
 
     /**
      * fake TemplateRequest
-     **/
+     */
     private TemplateRequestVo fakeTemplateRequest(){
         ExpirationEnum expiration = ExpirationEnum.ShiftExpiration;
         Long expireGap = 50000L;
@@ -51,7 +51,7 @@ public class BuildTemplateTest {
 
 
         ExpirationRuleTemplate expirationRule =
-                new CouponTemplateRuleVo.ExpirationRuleTemplate
+                new TemplateRuleVo.ExpirationRuleTemplate
                         (expiration.getCode(),
                                 expireGap);
         CustomerRuleTemplate customerRule =
@@ -60,7 +60,7 @@ public class BuildTemplateTest {
                 new DiscountRuleTemplate(DiscountEnum.MultiplyDiscount.getCode(),5,1);
         DistributeRuleTemplate distributeRule =
                 new DistributeRuleTemplate(DistributeEnum.MultiDistribute.getCode());
-        CouponTemplateRuleVo rule = new CouponTemplateRuleVo(expirationRule,
+        TemplateRuleVo rule = new TemplateRuleVo(expirationRule,
                                                                 discountRule,
                                                                 customerRule,
                                                                 distributeRule);

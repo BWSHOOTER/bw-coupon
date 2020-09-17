@@ -1,4 +1,4 @@
-package com.bw.coupon.conf;
+package com.bw.coupon.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

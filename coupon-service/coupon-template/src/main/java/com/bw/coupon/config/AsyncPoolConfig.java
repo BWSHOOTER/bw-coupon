@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 自定义异步任务线程池
- **/
+ */
 @Slf4j
 @EnableAsync
 @Configuration

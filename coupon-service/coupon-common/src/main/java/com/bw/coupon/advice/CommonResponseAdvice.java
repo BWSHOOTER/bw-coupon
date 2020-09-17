@@ -2,7 +2,7 @@ package com.bw.coupon.advice;
 
 
 import com.bw.coupon.annotation.IgnoreCommonResponseAdvice;
-import com.bw.coupon.vo.CommonResponseVo;
+import com.bw.coupon.vo.CommonResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -41,13 +41,13 @@ public class CommonResponseAdvice implements ResponseBodyAdvice<Object> {
                                   ServerHttpResponse serverHttpResponse) {
 
         // 定义最终的返回对象
-        CommonResponseVo<Object> response = new CommonResponseVo<>(0, "");
+        CommonResponse<Object> response = new CommonResponse<>(0, "");
 
         // 如果 o 是 null, response 不需要设置 data
         if (null == o) ;
         // 如果 o 已经是 CommonResponse, 不需要再次处理
-        else if (o instanceof CommonResponseVo)
-            response = (CommonResponseVo<Object>) o;
+        else if (o instanceof CommonResponse)
+            response = (CommonResponse<Object>) o;
         // 否则, 把响应对象作为 CommonResponse 的 data 部分
         else
             response.setData(o);

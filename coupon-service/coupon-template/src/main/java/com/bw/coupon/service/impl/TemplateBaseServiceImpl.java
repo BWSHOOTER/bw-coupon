@@ -4,7 +4,7 @@ import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.dao.CouponTemplateDao;
 import com.bw.coupon.exception.CommonException;
 import com.bw.coupon.service.ITemplateBaseService;
-import com.bw.coupon.vo.CouponTemplateSDK;
+import com.bw.coupon.vo.TemplateSDK;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
      * 查找所有可用的优惠券模板
      */
     @Override
-    public List<CouponTemplateSDK> findAllUsableTemplate() {
+    public List<TemplateSDK> findAllUsableTemplate() {
         List<CouponTemplate> templates =
                 templateDao.findAllByAvailableAndExpired(
                         true, false);
@@ -58,20 +58,20 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
      * 获取模板 ids 到 CouponTemplateSDK 的映射
      */
     @Override
-    public Map<Integer, CouponTemplateSDK> findIds2TemplateSDK(Collection<Integer> ids) {
+    public Map<Integer, TemplateSDK> findIds2TemplateSDK(Collection<Integer> ids) {
         List<CouponTemplate> templates = templateDao.findAllById(ids);
         return templates.stream().map(this::template2TemplateSDK)
                 .collect(Collectors.toMap(
-                        CouponTemplateSDK::getId, Function.identity()
+                        TemplateSDK::getId, Function.identity()
                 ));
     }
 
     /**
      * 将 CouponTemplate 转换为 CouponTemplateSDK
      * */
-    private CouponTemplateSDK template2TemplateSDK(CouponTemplate template) {
+    private TemplateSDK template2TemplateSDK(CouponTemplate template) {
 
-        return new CouponTemplateSDK(
+        return new TemplateSDK(
                 template.getId(),
                 template.getName(),
                 template.getLogo(),

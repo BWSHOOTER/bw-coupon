@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 /**
  * 枚举：产品线类别
- **/
+ */
 @Getter
 @AllArgsConstructor
 public enum ProductLineEnum {

@@ -11,12 +11,12 @@ import java.util.Date;
 
 /**
  * 优惠券规则对象
- **/
+ */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CouponTemplateRuleVo {
+public class TemplateRuleVo {
 
     private ExpirationRuleTemplate expiration;
     private DiscountRuleTemplate discount;
@@ -29,7 +29,7 @@ public class CouponTemplateRuleVo {
 
     /**
      * 过期规则
-     **/
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -54,7 +54,7 @@ public class CouponTemplateRuleVo {
 
     /**
      * 折扣规则
-     **/
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -67,7 +67,7 @@ public class CouponTemplateRuleVo {
 
     /**
      * 面向用户规则
-     **/
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -78,7 +78,7 @@ public class CouponTemplateRuleVo {
 
     /**
      * 发放规则
-     **/
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

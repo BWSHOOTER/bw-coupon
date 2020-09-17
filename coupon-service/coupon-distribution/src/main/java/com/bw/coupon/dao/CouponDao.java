@@ -10,7 +10,7 @@ import java.util.List;
  * JpaRepository<X, Y>
  *     X：实体类
  *     Y：主键类型
- **/
+ */
 public interface CouponDao extends JpaRepository<Coupon, Integer> {
 
     /**
