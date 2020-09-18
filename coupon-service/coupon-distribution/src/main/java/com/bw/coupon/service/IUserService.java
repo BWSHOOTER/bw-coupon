@@ -20,7 +20,7 @@ public interface IUserService {
     /**
      * 根据用户 id 和状态查询优惠券记录
      */
-    List<Coupon> findCouponsByStatus(Long userId, Integer status)
+    List<Coupon> findUserCouponsByStatus(Long userId, Integer status)
             throws CommonException;
 
     /**
@@ -32,7 +32,7 @@ public interface IUserService {
     /**
      * 用户领取优惠券
      */
-    Coupon acquireTemplate(AcquireTemplateRequest request)
+    Coupon acquireCoupon(AcquireTemplateRequest request)
             throws CommonException;
 
     /**

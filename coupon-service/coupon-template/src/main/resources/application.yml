@@ -18,7 +18,6 @@ spring:
     open-in-view: false
   datasource:
     # 数据源
-    #
     url: jdbc:mysql://127.0.0.1:3308/coupon_data?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=CTT
     username: root
     password: 123456
@@ -33,7 +32,7 @@ spring:
       connection-timeout: 30000
       max-lifetime: 45000
       auto-commit: true
-      pool-name: ImoocCouponHikariCP
+      pool-name: CouponHikariCP
   redis:
     database: 0
     host: 127.0.0.1
@@ -65,4 +64,4 @@ info:
 # ------------------------------------------------------------------------------------------------------
 logging:
   level:
-    com.imooc.coupon: debug
+    root: debug

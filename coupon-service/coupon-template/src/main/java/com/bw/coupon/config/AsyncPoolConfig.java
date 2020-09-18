@@ -1,8 +1,9 @@
 package com.bw.coupon.config;
 
-import com.alibaba.fastjson.JSON;
+import com.bw.coupon.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -21,6 +22,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 public class AsyncPoolConfig implements AsyncConfigurer {
+    private final JacksonUtil jackson;
+    @Autowired
+    public AsyncPoolConfig(JacksonUtil jackson) {
+        this.jackson = jackson;
+    }
 
     @Bean
     @Override
@@ -60,7 +66,7 @@ public class AsyncPoolConfig implements AsyncConfigurer {
             throwable.printStackTrace();
             log.error("AsyncError: {}, Method: {}, Param: {}",
                     throwable.getMessage(), method.getName(),
-                    JSON.toJSONString(objects));
+                    jackson.writeValueAsString(objects));
 
             // TODO 发送邮件或短信, 做进一步的处理
         }

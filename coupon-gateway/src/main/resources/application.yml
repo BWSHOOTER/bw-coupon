@@ -9,7 +9,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:8000/eureka/
-
       # 是否从 Eureka Server获取注册信息, 默认即为true，可省略
       fetch-registry: true
       # 是否将自己注册到 Eureka Server, 默认即为true，可省略
@@ -18,15 +17,20 @@ eureka:
 zuul:
   prefix: /bw-coupon-zuul
   routes:
-    # 优惠券模板微服务 路由配置定义
+    # 模板微服务 路由配置定义
     template:
-      # 网关只能通过路径进行转发，
+      # 网关只能通过路径进行转发
       # 这里利用每个微服务application.yml中定义的不同前缀来区分
       # 对应的ServiceId即为定义的微服务应用名称
       path: /template/**
       serviceId: coupon-template
       # 转发是否需要跳过前缀
       # 如果微服务中的mapping没有带上这里的前缀，则应为false
+      strip-prefix: false
+    # 分发微服务 路由配置定义
+    distruibution:
+      path: /distribution/**
+      serviceId: coupon-distribution
       strip-prefix: false
   host:
     # 连接微服务的超时时间

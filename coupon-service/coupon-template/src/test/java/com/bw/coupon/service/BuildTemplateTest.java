@@ -1,7 +1,5 @@
 package com.bw.coupon.service;
 
-
-import com.alibaba.fastjson.JSON;
 import com.bw.coupon.vo.TemplateRuleVo.*;
 import com.bw.coupon.enumeration.*;
 import com.bw.coupon.vo.TemplateRuleVo;
@@ -60,10 +58,8 @@ public class BuildTemplateTest {
                 new DiscountRuleTemplate(DiscountEnum.MultiplyDiscount.getCode(),5,1);
         DistributeRuleTemplate distributeRule =
                 new DistributeRuleTemplate(DistributeEnum.MultiDistribute.getCode());
-        TemplateRuleVo rule = new TemplateRuleVo(expirationRule,
-                                                                discountRule,
-                                                                customerRule,
-                                                                distributeRule);
+        TemplateRuleVo rule = new TemplateRuleVo(expirationRule,discountRule,
+                customerRule, distributeRule, 1000);
 
         request.setRule(rule);
         return request;

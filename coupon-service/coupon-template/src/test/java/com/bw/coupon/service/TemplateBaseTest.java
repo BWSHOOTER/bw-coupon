@@ -1,8 +1,8 @@
 package com.bw.coupon.service;
 
 
-import com.alibaba.fastjson.JSON;
 import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.util.JacksonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,24 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TemplateBaseTest {
+    private final ITemplateBaseService templateBaseService;
+    private final JacksonUtil jacksonUtil;
+
     @Autowired
-    private ITemplateBaseService templateBaseService;
+    public TemplateBaseTest(ITemplateBaseService templateBaseService, JacksonUtil jacksonUtil) {
+        this.templateBaseService = templateBaseService;
+        this.jacksonUtil = jacksonUtil;
+    }
 
     @Test
     public void testBuildTemplateInfo() throws CommonException{
-        System.out.println(JSON.toJSONString(templateBaseService.buildTemplateInfo(12)));
+        System.out.println(jacksonUtil.writeValueAsString(templateBaseService.buildTemplateInfo(12)));
         //System.out.println(JSON.toJSONString(templateBaseService.buildTemplateInfo(2)));
     }
 
     @Test
     public void findAllUsableTemplate() throws CommonException{
-        System.out.println(JSON.toJSONString(templateBaseService.findAllUsableTemplate()));
+        System.out.println(jacksonUtil.writeValueAsString(templateBaseService.findAllUsableTemplate()));
     }
 
     @Test
@@ -34,6 +40,6 @@ public class TemplateBaseTest {
         List<Integer> list = new ArrayList<>();
         list.add(12);
         list.add(2);
-        System.out.println(JSON.toJSONString(templateBaseService.findIds2TemplateSDK(list)));
+        System.out.println(jacksonUtil.writeValueAsString(templateBaseService.findIds2TemplateSDK(list)));
     }
 }

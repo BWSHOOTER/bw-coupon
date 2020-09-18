@@ -3,11 +3,6 @@ package com.bw.coupon.util;
 import com.bw.coupon.constant.Constant;
 import com.bw.coupon.enumeration.CouponStatusEnum;
 import org.apache.commons.lang3.RandomUtils;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.SessionCallback;
-
-import java.util.Map;
 
 public class RedisKeyUtil {
     /**

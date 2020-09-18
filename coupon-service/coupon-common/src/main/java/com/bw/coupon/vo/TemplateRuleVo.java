@@ -22,6 +22,7 @@ public class TemplateRuleVo {
     private DiscountRuleTemplate discount;
     private CustomerRuleTemplate customer;
     private DistributeRuleTemplate distribute;
+    private Integer limitation;
 
     public boolean validate(){
         return true;

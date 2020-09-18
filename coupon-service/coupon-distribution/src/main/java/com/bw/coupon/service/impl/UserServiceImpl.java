@@ -11,13 +11,16 @@ import com.bw.coupon.service.IRedisService;
 import com.bw.coupon.service.IUserService;
 import com.bw.coupon.util.JacksonUtil;
 import com.bw.coupon.vo.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +65,7 @@ public class UserServiceImpl implements IUserService {
      * 此时再对无效优惠券进行剔除，如果status为可用、已过期，则重新分类，并更新cache和数据库，最后返回
      */
     @Override
-    public List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CommonException {
+    public List<Coupon> findUserCouponsByStatus(Long userId, Integer status) throws CommonException {
         List<Coupon> curCached = redisService.getCachedCoupons(userId,status);
         List<Coupon> preTarget;
         if (CollectionUtils.isNotEmpty(curCached)) {
@@ -132,23 +135,176 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<TemplateSDK> findAvailableTemplate(Long userId) throws CommonException {
-        return null;
+        List<TemplateSDK> UnfilteredTemplateSDKS = templateClient.findAllUsableTemplate().getData();
+        log.debug("Find all Template From TemplateClient Count:{}", UnfilteredTemplateSDKS.size());
+        // 过滤过期的优惠券模板
+        Map<Integer, TemplateSDK> templateSdkMap = new HashMap<>(UnfilteredTemplateSDKS.size());
+        for(TemplateSDK sdk: UnfilteredTemplateSDKS){
+            if(isExpiredByTemplateSDK(sdk)){
+                templateSdkMap.put(sdk.getId(),sdk);
+            }
+        }
+        log.info("Find Usable Template Count: {}", templateSdkMap.size());
+
+        // 获得用户可用优惠券
+        List<Coupon> userUsableCoupons = findUserCouponsByStatus( userId, CouponStatusEnum.USABLE.getCode());
+        log.debug("Current User Has Usable Coupons: {}, {}", userId, userUsableCoupons.size());
+
+        // 统计用户不同优惠券模板的领取的数目
+        Map<Integer, Integer> couponCount = new HashMap<>(userUsableCoupons.size());
+        for(Coupon coupon : userUsableCoupons){
+            Integer templateId = coupon.getTemplateId();
+            couponCount.put(templateId,couponCount.getOrDefault(templateId,0));
+        }
+        // 剔除已达到当前用户领取上限的模板
+        for(Integer key : couponCount.keySet()){
+            if(!templateSdkMap.containsKey(key)){
+                continue;
+            }
+            if(templateSdkMap.get(key).getRule().getLimitation()>couponCount.get(key)){
+                continue;
+            }
+            templateSdkMap.remove(key);
+        }
+
+        // 剔除后的Map转为List
+        List<TemplateSDK> result = new ArrayList<>(templateSdkMap.size());
+        for(Integer id: templateSdkMap.keySet()){
+            result.add(templateSdkMap.get(id));
+        }
+        return result;
     }
 
     /**
      * 用户领取优惠券
+     * 1. 从 TemplateClient 拿到对应的优惠券, 并检查是否过期
+     * 2. 根据 limitation 判断用户是否可以领取
+     * 3. save to db
+     * 4. 填充 CouponTemplateSDK
+     * 5. save to cache
      */
     @Override
-    public Coupon acquireTemplate(AcquireTemplateRequest request) throws CommonException {
-        return null;
+    public Coupon acquireCoupon(AcquireTemplateRequest request) throws CommonException {
+        Integer templateId = request.getTemplateSDK().getId();
+        Long userId = request.getUserId();
+        // 根据request中的TemplateId，去TemplateClient中获取新的TemplateSDK
+        Map<Integer, TemplateSDK> map = templateClient.findIds2TemplateSDK(Collections.singletonList(templateId)).getData();
+        if(map==null || map.size()!=1){
+            log.error("Can Not Acquire Template From TemplateClient: {}",
+                    request.getTemplateSDK().getId());
+            throw new CommonException("Can Not Acquire Template From TemplateClient");
+        }
+        TemplateSDK sdk = map.get(templateId);
+        // 判断此SDK是否过期
+        if(isExpiredByTemplateSDK(sdk)){
+            log.error("Template Expire: {}", templateId);
+            throw new CommonException("Template Expire");
+        }
+
+        // 判断用户是否达到领取上限
+        int limit = sdk.getRule().getLimitation();
+        List<Coupon> userUsableCoupons = findUserCouponsByStatus( userId, CouponStatusEnum.USABLE.getCode());
+        for(Coupon coupon: userUsableCoupons){
+            if(coupon.getTemplateId() == templateId){
+                limit--;
+            }
+        }
+        if(limit<=0){
+            log.error("Exceed Template Assign Limitation: {}" + templateId);
+            throw new CommonException("Exceed Template Assign Limitation");
+        }
+
+        // todo 判断判断用户是否符合领取规则
+
+        // 尝试根据TemplateId获取一个CouponCode
+        String couponCode = redisService.tryToAcquireCouponCodeFromCache(templateId);
+        if(StringUtils.isEmpty(couponCode)){
+            log.error("Can Not Acquire Coupon Code: {}", request.getTemplateSDK().getId());
+            throw new CommonException("Can Not Acquire Coupon Code");
+        }
+        // 根据获取的CouponCode构造一个可用的Coupon
+        Coupon coupon = new Coupon(templateId,userId,couponCode,CouponStatusEnum.USABLE);
+        // 将Coupon存进Coupon表，并更新（携带主键）、setSDK
+        coupon = couponDao.save(coupon);
+        coupon.setTemplateSDK(request.getTemplateSDK());
+        // 将完整的Coupon加进RedisCache
+        redisService.addCouponToCache(userId,
+                                      Collections.singletonList(coupon),
+                                      CouponStatusEnum.USABLE.getCode());
+        return coupon;
     }
 
     /**
      * 结算(核销)优惠券
      * 入参中没有最终cost，出参中有
+     * 这里需要注意, 规则相关处理需要由 Settlement 系统去做
+     * 当前系统仅仅做业务处理过程(校验过程)
      */
     @Override
     public SettlementInfo settlement(SettlementInfo info) throws CommonException {
-        return null;
+        List<SettlementInfo.CouponAndTemplateInfo> ctInfos = info.getCouponAndTemplateInfos();
+        // 当没有传递优惠券时, 直接返回商品总价
+        if (CollectionUtils.isEmpty(ctInfos)) {
+            log.info("Empty Coupons For Settle.");
+            double goodsSum = 0.0;
+            for (GoodsInfo gi : info.getGoodsInfos()) {
+                goodsSum += gi.getPrice() * gi.getCount();
+            }
+            // 没有优惠券也就不存在优惠券的核销, SettlementInfo 其他的字段不需要修改
+            info.setCost(retain2Decimals(goodsSum));
+        }
+
+        // 校验传递的优惠券是否是用户自己的
+        List<Coupon> usableCoupons = findUserCouponsByStatus(info.getUserId(), CouponStatusEnum.USABLE.getCode());
+        Map<Integer, Coupon> userCouponMap = new HashMap<>(usableCoupons.size());
+        for(Coupon coupon: usableCoupons){
+            userCouponMap.put(coupon.getId(),coupon);
+        }
+        List<Coupon> toUseCoupons = new ArrayList<>(ctInfos.size());
+        for(SettlementInfo.CouponAndTemplateInfo ctinfo: ctInfos){
+            Integer couponId = ctinfo.getId();
+            if(!userCouponMap.containsKey(couponId)){
+                log.error("Coupon is Not User's: {}", couponId);
+                throw new CommonException("Coupon is Not User's: " + couponId);
+            }
+            toUseCoupons.add(userCouponMap.get(couponId));
+        }
+
+        // todo 通过结算服务获取结算信息
+        SettlementInfo processedInfo = settlementClient.computeRule(info).getData();
+        if (processedInfo.getEmploy()
+                && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
+            log.info("Settle User Coupon: {}, {}", info.getUserId(),
+                    jackson.writeValueAsString(toUseCoupons));
+            // 更新缓存
+            redisService.addCouponToCache(
+                    info.getUserId(),
+                    toUseCoupons,
+                    CouponStatusEnum.USED.getCode()
+            );
+            // 更新 db
+            kafkaTemplate.send(
+                    Constant.TOPIC,
+                    jackson.writeValueAsString(new CouponKafkaMessage(
+                                                CouponStatusEnum.USED.getCode(),
+                                                toUseCoupons.stream().map(Coupon::getId)
+                                                .collect(Collectors.toList())
+                    ))
+            );
+        }
+        return processedInfo;
+    }
+
+    /** 判断TemplateSDK是否过期 */
+    private boolean isExpiredByTemplateSDK(TemplateSDK templateSDK){
+        long curDate = new Date().getTime();
+        return curDate > templateSDK.getRule().getExpiration().getDeadLine();
+    }
+    /** 保留两位小数 */
+    private double retain2Decimals(double value) {
+        // BigDecimal.ROUND_HALF_UP 代表四舍五入
+        return new BigDecimal(value)
+                .setScale(2, BigDecimal.ROUND_HALF_UP)
+                .doubleValue();
     }
 }
