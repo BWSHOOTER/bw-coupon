@@ -34,7 +34,7 @@ public class KafkaServiceImpl implements IKafkaService {
 
     /** 消费优惠券 Kafka 消息 */
     @Override
-    @KafkaListener(topics = {Constant.TOPIC}, groupId = "coupon-1")
+    @KafkaListener(topics = {Constant.TOPIC}, groupId = "bw-coupon-1")
     public void consumeCouponKafkaMessage(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
 

@@ -47,21 +47,22 @@ eureka:
       defaultZone: http://127.0.0.1:8000/eureka/
 
 # ------------------------------------------------------------------------------------------------------
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-info:
-  app:
-    name: bw-coupon-template
-    groupId: bw-coupon-service
-    artifactId: coupon-template
-    version: 1.0-SNAPSHOT
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+#info:
+#  app:
+#    name: bw-coupon-template
+#    groupId: bw-coupon-service
+#    artifactId: coupon-template
+#    version: 1.0-SNAPSHOT
 
 # ------------------------------------------------------------------------------------------------------
 logging:
   level:
     root: debug
+

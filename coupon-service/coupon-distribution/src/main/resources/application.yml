@@ -42,7 +42,7 @@ spring:
     bootstrap-servers:
       - 127.0.0.1:9092
     consumer:
-      group-id: imooc-coupon-x
+      group-id: bw-coupon-x
       auto-offset-reset: latest
   # 开启 ribbon 重试机制, 即获取服务失败是否从另外一个节点重试
   cloud:
@@ -57,7 +57,7 @@ eureka:
 
 logging:
   level:
-    com.imooc.coupon: debug
+    com.bw.coupon: debug
 
 # feign 相关的配置
 feign:
