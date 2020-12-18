@@ -29,9 +29,9 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
         this.templateDao = templateDao;
     }
 
-/**
- * 根据优惠券模板 id 获取优惠券模板信息
- */
+    /**
+     * 根据优惠券模板 id 获取优惠券模板信息
+     */
     @Override
     public CouponTemplate buildTemplateInfo(Integer id) throws CommonException {
         Optional<CouponTemplate> template = templateDao.findById(id);
@@ -40,7 +40,6 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
         }
         return template.get();
     }
-
 
     /**
      * 查找所有可用的优惠券模板

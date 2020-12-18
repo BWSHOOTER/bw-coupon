@@ -30,8 +30,9 @@ public class RibbonController {
         this.jackson = jackson;
     }
 
-    /** 通过Ribbon组件调用模板微服务
-     *  /distuibution/info
+    /**
+     *  通过Ribbon组件调用模板微服务
+     *  /distribution/info
      */
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @IgnoreCommonResponseAdvice     //防止返回的Template又被包装一次

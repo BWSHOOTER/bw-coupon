@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RedisServiceImpl implements IRedisService {
-    /** StringRedisTemplate 表示Redis所有key都是String类型，不要直接使用RdiesTemplate */
+    /** StringRedisTemplate 表示 Redis 所有 key 都是 String 类型，不要直接使用 RedisTemplate */
     private final StringRedisTemplate redisTemplate;
     private final JacksonUtil jackson;
     @Autowired
@@ -36,8 +36,10 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     /**
-     * 根据 userId 和状态找到缓存的优惠券列表数据
-     * 注意, 可能会返回 null, 代表从没有过记录
+     * 根据 userId 和 status 找到缓存的优惠券列表数据
+     * 注意：
+     * 1. 可能会返回 null, 代表从没有过记录
+     * 2. 如果没有查到记录，则向Redis中存一份无效的优惠券记录
      */
     @Override
     public List<Coupon> getCachedCoupons(Long userId, Integer status) {
@@ -48,6 +50,8 @@ public class RedisServiceImpl implements IRedisService {
                 .stream()
                 .map(o -> Objects.toString(o, null))
                 .collect(Collectors.toList());
+
+        // 如果没有查到记录，则向Redis中存一份无效的优惠券记录
         if (CollectionUtils.isEmpty(couponStrs)) {
             saveEmptyCouponListToCache(userId,
                     Collections.singletonList(status));

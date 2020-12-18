@@ -47,5 +47,23 @@ public class SettlementInfo {
         /** 优惠券对应的模板对象 */
         private TemplateSDK template;
     }
+
+    /**
+     * fake 商品信息
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GoodsInfo {
+
+        /** 商品产品线*/
+        private Integer productLine;
+
+        /** 商品价格 */
+        private Double price;
+
+        /** 商品数量 */
+        private Integer count;
+    }
 }
 

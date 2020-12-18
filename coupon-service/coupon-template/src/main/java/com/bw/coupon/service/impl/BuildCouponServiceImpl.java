@@ -3,7 +3,7 @@ package com.bw.coupon.service.impl;
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.constant.Constant;
 import com.bw.coupon.dao.CouponTemplateDao;
-import com.bw.coupon.service.IAsyncService;
+import com.bw.coupon.service.IBuildCouponService;
 import com.bw.coupon.until.StringUtil;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +19,14 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-public class AsyncServiceImpl implements IAsyncService {
+public class BuildCouponServiceImpl implements IBuildCouponService {
     /** CouponTemplate Dao */
     private final CouponTemplateDao templateDao;
     /** Redis 模板类 */
     private final StringRedisTemplate redisTemplate;
     @Autowired
-    public AsyncServiceImpl(CouponTemplateDao templateDao,
-                            StringRedisTemplate redisTemplate) {
+    public BuildCouponServiceImpl(CouponTemplateDao templateDao,
+                                  StringRedisTemplate redisTemplate) {
         this.templateDao = templateDao;
         this.redisTemplate = redisTemplate;
     }
@@ -36,28 +36,32 @@ public class AsyncServiceImpl implements IAsyncService {
     @Override
     @SuppressWarnings("all")
     public void asyncConstructCouponByTemplate(CouponTemplate template) {
+        // 计时，可不要
         Stopwatch watch = Stopwatch.createStarted();
 
+        //1. 生成优惠券码的Set
         Set<String> couponCodes = buildCouponCode(template);
 
-        //coupon_template_code_1
+        //2. 生成优惠券集合在Redis中的Key：coupon_template_code_1
         String redisKey = String.format("%s%s",
                 Constant.RedisPrefix.COUPON_TEMPLATE, template.getId().toString());
-
+        //3. 将优惠券码放入Redis的集合中
         log.info("Push CouponCode To Redis: {}",
                 redisTemplate.opsForList().rightPushAll(redisKey, couponCodes));
+
+        // 计时结束
+        watch.stop();
+        log.info("Construct CouponCode By Template[id = {}] Cost：{}ms.",
+                template.getId(),
+                watch.elapsed(TimeUnit.MILLISECONDS));
 
         //更新MySQL中CouponTemplate的可用状态
         template.setAvailable(true);
         templateDao.save(template);
 
-        watch.stop();
-
-        log.info("Construct CouponCode By Template Cost: {}ms",
-                watch.elapsed(TimeUnit.MILLISECONDS));
+        log.info("CouponTemplate({}) Is Available!", template.getId());
 
         // TODO 异步成功后的通知操作
-        log.info("CouponTemplate({}) Is Available!", template.getId());
     }
 
     /**
@@ -96,6 +100,4 @@ public class AsyncServiceImpl implements IAsyncService {
         log.info("Build Coupon Code Cost: {}ms", watch.elapsed(TimeUnit.MILLISECONDS));
         return result;
     }
-
-
 }

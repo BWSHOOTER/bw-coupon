@@ -16,17 +16,11 @@ import java.util.List;
  * 4. 用户消费优惠券服务 - coupon-settlement 微服务配合实现
  */
 
-public interface IUserService {
+public interface ICouponService {
     /**
      * 根据用户 id 和状态查询优惠券记录
      */
     List<Coupon> findUserCouponsByStatus(Long userId, Integer status)
-            throws CommonException;
-
-    /**
-     * 根据用户 id 查找当前可以领取的优惠券模板
-     */
-    List<TemplateSDK> findAvailableTemplate(Long userId)
             throws CommonException;
 
     /**

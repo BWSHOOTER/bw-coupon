@@ -6,10 +6,14 @@ import com.bw.coupon.vo.TemplateRequestVo;
 
 
 /**
- * 构建优惠券模板服务接口
+ * 生成券模板服务接口
  */
 public interface IBuildTemplateService {
-    /** 创建优惠券模板 */
+    /**
+     * @Description: 根据生成优惠券模板的请求，生成优惠券模板，并启动异步生成优惠券的任务
+     * @Author: BaoWei
+     * @Date: 2020/12/15 15:34
+     */
     CouponTemplate buildCouponTemplate(TemplateRequestVo request)
         throws CommonException;
 }
