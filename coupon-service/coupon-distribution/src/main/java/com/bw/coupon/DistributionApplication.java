@@ -18,11 +18,13 @@ import org.springframework.web.client.RestTemplate;
 @EnableCircuitBreaker
 public class DistributionApplication {
 
+    /*
     @Bean
     @LoadBalanced   //负载均衡
     RestTemplate restTemplate(){
         return new RestTemplate();
     }
+     */
 
     public static void main(String[] args) {
         SpringApplication.run(DistributionApplication.class,args);

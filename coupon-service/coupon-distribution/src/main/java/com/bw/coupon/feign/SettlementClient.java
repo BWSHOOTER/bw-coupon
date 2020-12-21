@@ -1,6 +1,6 @@
 package com.bw.coupon.feign;
 
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.feign.hystrix.SettlementClientHystrix;
 import com.bw.coupon.vo.CommonResponse;
 import com.bw.coupon.vo.SettlementInfo;

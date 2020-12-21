@@ -1,6 +1,6 @@
 package com.bw.coupon.feign;
 
-import com.bw.coupon.feign.hystrix.TemplateClientHystrix;
+import com.bw.coupon.feign.hystrix.TemplateFeignClientHystrix;
 import com.bw.coupon.vo.CommonResponse;
 import com.bw.coupon.vo.TemplateSDK;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,8 +16,8 @@ import java.util.Map;
  * 优惠券模板服务Feign接口定义
  */
 //application.yml中定义的应用名
-@FeignClient(value = "coupon-template", fallback = TemplateClientHystrix.class)
-public interface TemplateClient {
+@FeignClient(value = "coupon-template", fallback = TemplateFeignClientHystrix.class)
+public interface TemplateFeignClient {
     /**
      * 查找所有可用的优惠券模板
      * 127.0.0.1:7001/template/sdk/all

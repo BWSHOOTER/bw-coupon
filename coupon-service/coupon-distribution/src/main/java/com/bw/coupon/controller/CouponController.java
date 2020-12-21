@@ -1,7 +1,7 @@
 package com.bw.coupon.controller;
 
 import com.bw.coupon.entity.Coupon;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.service.ICouponService;
 import com.bw.coupon.service.ITemplateService;
 import com.bw.coupon.util.JacksonUtil;
@@ -18,12 +18,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-public class NativeController {
+public class CouponController {
     private final ICouponService couponService;
     private final JacksonUtil jackson;
     private final ITemplateService templateService;
 
-    public NativeController(ICouponService couponService,
+    public CouponController(ICouponService couponService,
                             ITemplateService templateService,
                             JacksonUtil jacksonUtil) {
         this.couponService = couponService;

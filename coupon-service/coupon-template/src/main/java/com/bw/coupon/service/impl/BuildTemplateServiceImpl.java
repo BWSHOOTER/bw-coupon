@@ -2,7 +2,7 @@ package com.bw.coupon.service.impl;
 
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.dao.CouponTemplateDao;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.service.IBuildCouponService;
 import com.bw.coupon.service.IBuildTemplateService;
 import com.bw.coupon.vo.TemplateRequestVo;

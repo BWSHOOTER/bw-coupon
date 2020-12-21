@@ -1,7 +1,7 @@
 package com.bw.coupon.controller;
 
 import com.bw.coupon.Entity.CouponTemplate;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.service.IBuildTemplateService;
 import com.bw.coupon.service.ITemplateBaseService;
 import com.bw.coupon.util.JacksonUtil;

@@ -1,9 +1,8 @@
 package com.bw.coupon.service;
 
 import com.bw.coupon.entity.Coupon;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.vo.AcquireTemplateRequest;
-import com.bw.coupon.vo.TemplateSDK;
 import com.bw.coupon.vo.SettlementInfo;
 
 import java.util.List;

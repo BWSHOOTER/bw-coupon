@@ -1,8 +1,9 @@
 package com.bw.coupon.controller;
 
 
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
@@ -30,7 +31,7 @@ public class HealthCheckController {
      * 提供了获取服务id的方法
      */
     private final Registration registration;
-    public HealthCheckController(DiscoveryClient discoveryClient, Registration registration) {
+    public HealthCheckController(DiscoveryClient discoveryClient, @Qualifier("eurekaRegistration") Registration registration) {
         this.discoveryClient = discoveryClient;
         this.registration = registration;
     }

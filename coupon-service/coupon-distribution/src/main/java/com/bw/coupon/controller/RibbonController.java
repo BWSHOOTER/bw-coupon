@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,8 @@ import java.util.List;
 
 /**
  * Ribbon 应用 Controller
+ *
+ * 这里和Feign的功能是重复的，只是演示使用Ribbon调用微服务（本质上是通过RestTemplate）
  */
 @Slf4j
 @RestController
@@ -30,11 +34,8 @@ public class RibbonController {
         this.jackson = jackson;
     }
 
-    /**
-     *  通过Ribbon组件调用模板微服务
-     *  /distribution/info
-     */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    /** 通过Ribbon组件调用模板微服务 */
+    @RequestMapping(value = "/info", method = RequestMethod.GET)    // */distribution/info
     @IgnoreCommonResponseAdvice     //防止返回的Template又被包装一次
     public TemplateInfo getTemplate(){
         String infoUrl = "http://coupon-template/template/info";
@@ -49,5 +50,11 @@ public class RibbonController {
         private Integer code;
         private String message;
         private List<Map<String, Object>> data;
+    }
+
+    @Bean
+    @LoadBalanced //负载均衡
+    RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }

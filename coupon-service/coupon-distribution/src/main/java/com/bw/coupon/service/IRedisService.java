@@ -2,7 +2,7 @@ package com.bw.coupon.service;
 
 
 import com.bw.coupon.entity.Coupon;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;

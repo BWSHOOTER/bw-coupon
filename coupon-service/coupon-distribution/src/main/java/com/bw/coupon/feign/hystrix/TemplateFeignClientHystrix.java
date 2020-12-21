@@ -1,6 +1,6 @@
 package com.bw.coupon.feign.hystrix;
 
-import com.bw.coupon.feign.TemplateClient;
+import com.bw.coupon.feign.TemplateFeignClient;
 import com.bw.coupon.vo.CommonResponse;
 import com.bw.coupon.vo.TemplateSDK;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class TemplateClientHystrix implements TemplateClient {
+public class TemplateFeignClientHystrix implements TemplateFeignClient {
     /**
      * 查找所有可用的优惠券模板
      * 127.0.0.1:7001/template/sdk/all

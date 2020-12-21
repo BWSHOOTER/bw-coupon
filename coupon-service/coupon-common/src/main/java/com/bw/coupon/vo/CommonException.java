@@ -1,4 +1,4 @@
-package com.bw.coupon.exception;
+package com.bw.coupon.vo;
 
 /**
  * 通用异常定义

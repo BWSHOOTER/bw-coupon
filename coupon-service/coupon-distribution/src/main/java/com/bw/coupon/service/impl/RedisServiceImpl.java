@@ -2,7 +2,7 @@ package com.bw.coupon.service.impl;
 
 import com.bw.coupon.entity.Coupon;
 import com.bw.coupon.enumeration.CouponStatusEnum;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.service.IRedisService;
 import com.bw.coupon.util.JacksonUtil;
 import com.bw.coupon.util.RedisKeyUtil;

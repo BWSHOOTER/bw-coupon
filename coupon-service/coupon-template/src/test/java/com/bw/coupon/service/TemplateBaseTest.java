@@ -1,7 +1,7 @@
 package com.bw.coupon.service;
 
 
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.util.JacksonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;

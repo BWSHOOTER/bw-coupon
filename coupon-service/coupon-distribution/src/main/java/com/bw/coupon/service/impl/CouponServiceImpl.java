@@ -4,9 +4,9 @@ import com.bw.coupon.constant.Constant;
 import com.bw.coupon.dao.CouponDao;
 import com.bw.coupon.entity.Coupon;
 import com.bw.coupon.enumeration.CouponStatusEnum;
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.feign.SettlementClient;
-import com.bw.coupon.feign.TemplateClient;
+import com.bw.coupon.feign.TemplateFeignClient;
 import com.bw.coupon.service.IRedisService;
 import com.bw.coupon.service.ICouponService;
 import com.bw.coupon.util.JacksonUtil;
@@ -36,7 +36,7 @@ public class CouponServiceImpl implements ICouponService {
     /** Redis 服务 */
     private final IRedisService redisService;
     /** 模板微服务客户端 */
-    private TemplateClient templateClient = null;
+    private TemplateFeignClient templateFeignClient = null;
     /** 结算微服务客户端 */
     private final SettlementClient settlementClient;
     /** Kafka 客户端 */
@@ -45,11 +45,11 @@ public class CouponServiceImpl implements ICouponService {
     private final JacksonUtil jackson;
 
     public CouponServiceImpl(CouponDao couponDao, IRedisService redisService,
-                             TemplateClient templateClient, SettlementClient settlementClient,
+                             TemplateFeignClient templateFeignClient, SettlementClient settlementClient,
                              KafkaTemplate<String, String> kafkaTemplate, JacksonUtil jackson) {
         this.couponDao = couponDao;
         this.redisService = redisService;
-        this.templateClient = templateClient;
+        this.templateFeignClient = templateFeignClient;
         this.settlementClient = settlementClient;
         this.kafkaTemplate = kafkaTemplate;
         this.jackson = jackson;
@@ -97,7 +97,7 @@ public class CouponServiceImpl implements ICouponService {
             List<Integer> ids = dbCoupons.stream()
                                     .map(Coupon::getTemplateId)
                                     .collect(Collectors.toList());
-            Map<Integer, TemplateSDK> id2TemplateSDK = templateClient.findIds2TemplateSDK(ids).getData();
+            Map<Integer, TemplateSDK> id2TemplateSDK = templateFeignClient.findIds2TemplateSDK(ids).getData();
             for(Coupon dbCoupon: dbCoupons){
                 dbCoupon.setTemplateSDK(id2TemplateSDK.get(dbCoupon.getTemplateId()));
             }
@@ -174,7 +174,7 @@ public class CouponServiceImpl implements ICouponService {
         Integer templateId = request.getTemplateSDK().getId();
         Long userId = request.getUserId();
         // 1. 根据request中的TemplateId，去TemplateClient中获取新的TemplateSDK
-        Map<Integer, TemplateSDK> map = templateClient.findIds2TemplateSDK(Collections.singletonList(templateId)).getData();
+        Map<Integer, TemplateSDK> map = templateFeignClient.findIds2TemplateSDK(Collections.singletonList(templateId)).getData();
         if(map==null || map.size()!=1){
             log.error("Can Not Acquire Template From TemplateClient: {}",
                     request.getTemplateSDK().getId());
@@ -241,9 +241,10 @@ public class CouponServiceImpl implements ICouponService {
             }
             // 没有优惠券也就不存在优惠券的核销, SettlementInfo 其他的字段不需要修改
             info.setCost(retain2Decimals(goodsSum));
+            return info;
         }
 
-        // 校验传递的优惠券是否是用户自己的
+        // 校验传递的优惠券是否在该用户可用优惠券集合中
         List<Coupon> usableCoupons = findUserCouponsByStatus(info.getUserId(), CouponStatusEnum.USABLE.getCode());
         Map<Integer, Coupon> userCouponMap = new HashMap<>(usableCoupons.size());
         for(Coupon coupon: usableCoupons){
@@ -263,7 +264,7 @@ public class CouponServiceImpl implements ICouponService {
         SettlementInfo processedInfo = settlementClient.computeRule(info).getData();
         // 核销，且成功
         if (processedInfo.getEmploy()
-                && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
+                /*&& CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())*/) {
             log.info("Settle User Coupon: {}, {}",
                     info.getUserId(),
                     jackson.writeValueAsString(toUseCoupons));

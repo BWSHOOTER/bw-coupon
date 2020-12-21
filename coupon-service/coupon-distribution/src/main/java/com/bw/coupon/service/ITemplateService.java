@@ -1,6 +1,6 @@
 package com.bw.coupon.service;
 
-import com.bw.coupon.exception.CommonException;
+import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.vo.TemplateSDK;
 
 import java.util.List;

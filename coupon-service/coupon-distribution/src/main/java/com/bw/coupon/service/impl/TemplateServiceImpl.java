@@ -2,12 +2,13 @@ package com.bw.coupon.service.impl;
 
 import com.bw.coupon.entity.Coupon;
 import com.bw.coupon.enumeration.CouponStatusEnum;
-import com.bw.coupon.exception.CommonException;
-import com.bw.coupon.feign.TemplateClient;
+import com.bw.coupon.vo.CommonException;
+import com.bw.coupon.feign.TemplateFeignClient;
 import com.bw.coupon.service.ITemplateService;
 import com.bw.coupon.service.ICouponService;
 import com.bw.coupon.vo.TemplateSDK;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.bw.coupon.util.TemplateUtil;
 
@@ -18,10 +19,10 @@ import java.util.*;
 public class TemplateServiceImpl implements ITemplateService {
     private final ICouponService couponService;
     /** 模板微服务客户端 */
-    private final TemplateClient templateClient;
+    private final TemplateFeignClient templateFeignClient;
 
-    public TemplateServiceImpl(TemplateClient templateClient, ICouponService couponService) {
-        this.templateClient = templateClient;
+    public TemplateServiceImpl(TemplateFeignClient templateFeignClient, ICouponService couponService) {
+        this.templateFeignClient = templateFeignClient;
         this.couponService = couponService;
     }
 
@@ -37,7 +38,7 @@ public class TemplateServiceImpl implements ITemplateService {
     @Override
     public List<TemplateSDK> findAvailableTemplateByUserId(Long userId) throws CommonException {
         // 1. 获取所有优惠券模板
-        List<TemplateSDK> UnfilteredTemplateSDKS = templateClient.findAllUsableTemplate().getData();
+        List<TemplateSDK> UnfilteredTemplateSDKS = templateFeignClient.findAllUsableTemplate().getData();
         log.debug("Find all Template From TemplateClient Count:{}", UnfilteredTemplateSDKS.size());
 
         // 2. 过滤过期的优惠券模板
