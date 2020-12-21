@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 public enum DiscountEnum {
-    MinusDiscount(901,"立减折扣"),
+    MinusDiscount(901,"减法折扣"),
     MultiplyDiscount(902,"乘法折扣");
 
     //一般通过一个值返回枚举，都叫of

@@ -24,6 +24,7 @@ public class TemplateRuleVo {
     private DistributeRuleTemplate distribute;
     private Integer limitation;
 
+    // todo
     public boolean validate(){
         return true;
     }
