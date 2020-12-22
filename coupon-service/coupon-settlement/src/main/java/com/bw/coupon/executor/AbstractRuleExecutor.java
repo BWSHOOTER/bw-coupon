@@ -1,8 +1,11 @@
 package com.bw.coupon.executor;
 
 import com.bw.coupon.vo.SettlementInfo;
+import com.bw.coupon.vo.TemplateRuleVo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,14 +15,32 @@ import java.util.List;
  */
 public abstract class AbstractRuleExecutor implements RuleExecutor{
     /**
-     * @Description: 校验商品类型与优惠券是否匹配
+     * @Description: 校验是否每一件商品的类型都与每一张优惠券适用品类相匹配
      * @Author: BaoWei
      * @Date: 2020/12/21 17:20
-     * 注意：
-     * 1. 这里实现的是单品类优惠券的校验，多品类商品需要重载此方法
-     * 2. 商品只需要有一个优惠券要求的商品类型去匹配即可以
      */
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlementInfo){
+        // 获取每一张优惠券的使用品类列表
+        List<List<Integer>> categoryCodeLists = new ArrayList<>();
+        for(SettlementInfo.CouponAndTemplateInfo ctInfo: settlementInfo.getCouponAndTemplateInfos()){
+            List<Integer> categoryCodeList = new ArrayList<>();
+            for(TemplateRuleVo.GoodsCategoryRuleTemplate goodsCategory:
+                    ctInfo.getTemplate().getRule().getGoodsCategories()){
+                categoryCodeList.add(goodsCategory.getCode());
+            }
+            categoryCodeLists.add(categoryCodeList);
+        }
+        // 对每一件商品进行所有优惠券的匹配校验
+        List<SettlementInfo.GoodsInfo> goodsInfos = settlementInfo.getGoodsInfos();
+        for(SettlementInfo.GoodsInfo goodsInfo: goodsInfos){
+            boolean curRes = true;
+            for(List<Integer> categoryList: categoryCodeLists){
+                if(!categoryList.contains(goodsInfo.getProductLine()))
+                    curRes = false;
+            }
+            if(!curRes)
+                return false;
+        }
         return true;
     }
 
@@ -28,8 +49,11 @@ public abstract class AbstractRuleExecutor implements RuleExecutor{
      * @Author: BaoWei
      * @Date: 2020/12/21 17:25
      */
-    protected SettlementInfo processGoodsTypeNotSatisfy(SettlementInfo settlementInfo, double goodsSum) {
-        return null;
+    protected SettlementInfo processGoodsTypeNotSatisfy(SettlementInfo settlementInfo) {
+        double goodsSum = calGoodsTotalCost(settlementInfo.getGoodsInfos());
+        settlementInfo.setCost(goodsSum);
+        settlementInfo.setCouponAndTemplateInfos(Collections.emptyList());
+        return settlementInfo;
     }
 
     /**

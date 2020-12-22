@@ -4,7 +4,7 @@ import com.bw.coupon.converter.*;
 import com.bw.coupon.enumeration.CustomerEnum;
 import com.bw.coupon.enumeration.DiscountEnum;
 import com.bw.coupon.enumeration.DistributeEnum;
-import com.bw.coupon.enumeration.ProductLineEnum;
+import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import com.bw.coupon.serialization.CouponTemplateSerialize;
 import com.bw.coupon.vo.TemplateRuleVo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -66,7 +66,7 @@ public class CouponTemplate implements Serializable {
     /** 8.产品线 */
     @Column(name = "product_line", nullable = false)
     @Convert(converter = ProductLineEnumConverter.class)
-    private ProductLineEnum productLine;
+    private GoodsCategoryEnum productLine;
 
     /** 9.总数 */
     @Column(name = "coupon_count", nullable = false)
@@ -117,7 +117,7 @@ public class CouponTemplate implements Serializable {
         this.logo = logo;
         this.intro = intro;
         this.discount = DiscountEnum.of(discount);
-        this.productLine = ProductLineEnum.of(productLine);
+        this.productLine = GoodsCategoryEnum.of(productLine);
         this.count = count;
         this.userId = userId;
         this.distribute = DistributeEnum.of(distribute);

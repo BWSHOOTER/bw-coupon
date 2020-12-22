@@ -4,6 +4,7 @@ import com.bw.coupon.vo.TemplateRuleVo.*;
 import com.bw.coupon.enumeration.*;
 import com.bw.coupon.vo.TemplateRuleVo;
 import com.bw.coupon.vo.TemplateRequestVo;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class BuildTemplateTest {
         request.setCount(1000);
         request.setUserId(10001L);
         request.setCustomer(CustomerEnum.AllCustomer.getCode());
-        request.setProductLine(ProductLineEnum.SkinProduct.getCode());
+        request.setProductLine(GoodsCategoryEnum.SkinProduct.getCode());
         request.setDiscount(DiscountEnum.MultiplyDiscount.getCode());
         request.setDistribute(DistributeEnum.MultiDistribute.getCode());
 

@@ -2,12 +2,14 @@ package com.bw.coupon.vo;
 
 import com.bw.coupon.enumeration.DistributeEnum;
 import com.bw.coupon.enumeration.ExpirationEnum;
+import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 优惠券规则对象
@@ -23,6 +25,7 @@ public class TemplateRuleVo {
     private CustomerRuleTemplate customer;
     private DistributeRuleTemplate distribute;
     private Integer limitation;
+    private List<GoodsCategoryRuleTemplate> goodsCategories;
 
     // todo
     public boolean validate(){
@@ -87,6 +90,21 @@ public class TemplateRuleVo {
     public static class DistributeRuleTemplate{
         // 对应DistributeEnum的code
         private Integer type;
+    }
 
+    /**
+     * 适用商品品类
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GoodsCategoryRuleTemplate{
+        private Integer code;
+        private String desc;
+
+        public GoodsCategoryRuleTemplate(GoodsCategoryEnum goodsCategoryEnum){
+            this.code = goodsCategoryEnum.getCode();
+            this.desc = goodsCategoryEnum.getDesc();
+        }
     }
 }

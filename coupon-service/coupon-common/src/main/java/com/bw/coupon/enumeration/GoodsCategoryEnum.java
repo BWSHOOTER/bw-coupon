@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum ProductLineEnum {
+public enum GoodsCategoryEnum {
     ElectronicProduct(941,"电脑电子"),
     SkinProduct(942,"美妆护肤"),
     ClothingProduct(943,"服装"),
@@ -21,7 +21,7 @@ public enum ProductLineEnum {
     private Integer code;
     private String desc;
 
-    public static ProductLineEnum of(Integer code){
+    public static GoodsCategoryEnum of(Integer code){
         if(code==null)
             throw new IllegalArgumentException("Enum ProductLineEnum code is NULL!");
 
