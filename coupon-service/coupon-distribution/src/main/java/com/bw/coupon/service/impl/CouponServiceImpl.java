@@ -97,9 +97,9 @@ public class CouponServiceImpl implements ICouponService {
             List<Integer> ids = dbCoupons.stream()
                                     .map(Coupon::getTemplateId)
                                     .collect(Collectors.toList());
-            Map<Integer, TemplateSDK> id2TemplateSDK = templateFeignClient.findIds2TemplateSDK(ids).getData();
+            Map<Integer, TemplateVo> id2TemplateSDK = templateFeignClient.findIds2TemplateSDK(ids).getData();
             for(Coupon dbCoupon: dbCoupons){
-                dbCoupon.setTemplateSDK(id2TemplateSDK.get(dbCoupon.getTemplateId()));
+                dbCoupon.setTemplateVo(id2TemplateSDK.get(dbCoupon.getTemplateId()));
             }
             // 将记录写入 Cache
             redisService.addCouponToCache(userId, dbCoupons, status);
@@ -171,16 +171,16 @@ public class CouponServiceImpl implements ICouponService {
      */
     @Override
     public Coupon acquireCoupon(AcquireTemplateRequest request) throws CommonException {
-        Integer templateId = request.getTemplateSDK().getId();
+        Integer templateId = request.getTemplateVo().getId();
         Long userId = request.getUserId();
         // 1. 根据request中的TemplateId，去TemplateClient中获取新的TemplateSDK
-        Map<Integer, TemplateSDK> map = templateFeignClient.findIds2TemplateSDK(Collections.singletonList(templateId)).getData();
+        Map<Integer, TemplateVo> map = templateFeignClient.findIds2TemplateSDK(Collections.singletonList(templateId)).getData();
         if(map==null || map.size()!=1){
             log.error("Can Not Acquire Template From TemplateClient: {}",
-                    request.getTemplateSDK().getId());
+                    request.getTemplateVo().getId());
             throw new CommonException("Can Not Acquire Template From TemplateClient");
         }
-        TemplateSDK sdk = map.get(templateId);
+        TemplateVo sdk = map.get(templateId);
 
         // 2. 判断此SDK是否过期
         if(TemplateUtil.isExpiredByTemplateSDK(sdk)){
@@ -206,7 +206,7 @@ public class CouponServiceImpl implements ICouponService {
         // 5.1 尝试根据TemplateId获取一个CouponCode
         String couponCode = redisService.tryToAcquireCouponCodeFromCache(templateId);
         if(StringUtils.isEmpty(couponCode)){
-            log.error("Can Not Acquire Coupon Code: {}", request.getTemplateSDK().getId());
+            log.error("Can Not Acquire Coupon Code: {}", request.getTemplateVo().getId());
             throw new CommonException("Can Not Acquire Coupon Code");
         }
         // 5.2 根据获取的CouponCode构造一个可用的Coupon
@@ -214,7 +214,7 @@ public class CouponServiceImpl implements ICouponService {
         // 5.3 将Coupon存进Coupon表，得到返回结果
         coupon = couponDao.save(coupon);
         // 6. 填充 CouponTemplateSDK 得到完整的 Coupon 对象
-        coupon.setTemplateSDK(request.getTemplateSDK());
+        coupon.setTemplateVo(request.getTemplateVo());
 
         // 7. 将完整的Coupon加进RedisCache
         redisService.addCouponToCache(userId,

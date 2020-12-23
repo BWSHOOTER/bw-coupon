@@ -3,6 +3,8 @@ package com.bw.coupon.enumeration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -31,4 +33,30 @@ public enum GoodsCategoryEnum {
                 .orElseThrow(() -> new IllegalArgumentException("Enum ProductLineEnum code " + code + " is NOT EXISTS!"));
     }
 
+    /** 将多个code组成的String，还原成枚举的列表 */
+    public static List<GoodsCategoryEnum> of(String codesStr){
+        String[] codes = codesStr.split(",");
+        List<GoodsCategoryEnum> list = new ArrayList<>(codes.length);
+        for(String code: codes){
+            list.add(GoodsCategoryEnum.of(Integer.parseInt(code)));
+        }
+        return list;
+    }
+
+    /** 将枚举列表转换成多个code组成的String */
+    public static String listToCodesStr(List<GoodsCategoryEnum> list) {
+        String[] codes = new String[list.size()];
+        for(int i = 0; i<list.size(); i++){
+            codes[i] = list.get(i).getCode().toString();
+        }
+        return String.join(",",codes);
+    }
+    /** 从枚举的列表提取出code的列表 */
+    public static List<Integer> getCodesByEnums(List<GoodsCategoryEnum> enums){
+        List<Integer> codes = new ArrayList<>(enums.size());
+        for(GoodsCategoryEnum goodsCategoryEnum: enums){
+            codes.add(goodsCategoryEnum.getCode());
+        }
+        return codes;
+    }
 }

@@ -1,5 +1,7 @@
 package com.bw.coupon.executor;
 
+import com.bw.coupon.util.PriceUtil;
+import com.bw.coupon.vo.GoodsInfo;
 import com.bw.coupon.vo.SettlementInfo;
 import com.bw.coupon.vo.TemplateRuleVo;
 
@@ -20,60 +22,32 @@ public abstract class AbstractRuleExecutor implements RuleExecutor{
      * @Date: 2020/12/21 17:20
      */
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlementInfo){
-        // 获取每一张优惠券的使用品类列表
-        List<List<Integer>> categoryCodeLists = new ArrayList<>();
-        for(SettlementInfo.CouponAndTemplateInfo ctInfo: settlementInfo.getCouponAndTemplateInfos()){
-            List<Integer> categoryCodeList = new ArrayList<>();
-            for(TemplateRuleVo.GoodsCategoryRuleTemplate goodsCategory:
-                    ctInfo.getTemplate().getRule().getGoodsCategories()){
-                categoryCodeList.add(goodsCategory.getCode());
-            }
-            categoryCodeLists.add(categoryCodeList);
-        }
         // 对每一件商品进行所有优惠券的匹配校验
-        List<SettlementInfo.GoodsInfo> goodsInfos = settlementInfo.getGoodsInfos();
-        for(SettlementInfo.GoodsInfo goodsInfo: goodsInfos){
+        for(GoodsInfo goodsInfo: settlementInfo.getGoodsInfos()){
+            // 当前商品的匹配校验结果
             boolean curRes = true;
-            for(List<Integer> categoryList: categoryCodeLists){
-                if(!categoryList.contains(goodsInfo.getProductLine()))
+            // 所有优惠券都需要匹配
+            for(SettlementInfo.CouponAndTemplateInfo ctInfo: settlementInfo.getCouponAndTemplateInfos()){
+                if(!ctInfo.getTemplateVo().getGoodsCategoryCodes().contains(goodsInfo.getCategoryCode())){
                     curRes = false;
+                }
             }
-            if(!curRes)
+            if(!curRes){
                 return false;
+            }
         }
         return true;
     }
 
     /**
-     * @Description: 处理商品类型与优惠券限制不匹配的情况
+     * @Description: 处理商品类型与优惠券限制不匹配的情况。即将Cost设为原价，并清空优惠券与模板列表。
      * @Author: BaoWei
      * @Date: 2020/12/21 17:25
      */
     protected SettlementInfo processGoodsTypeNotSatisfy(SettlementInfo settlementInfo) {
-        double goodsSum = calGoodsTotalCost(settlementInfo.getGoodsInfos());
+        double goodsSum = PriceUtil.calGoodsTotalCost(settlementInfo.getGoodsInfos());
         settlementInfo.setCost(goodsSum);
         settlementInfo.setCouponAndTemplateInfos(Collections.emptyList());
         return settlementInfo;
-    }
-
-    /**
-     * @Description: 计算商品总价
-     * @Author: BaoWei
-     * @Date: 2020/12/21 17:36
-     */
-    protected double calGoodsTotalCost(List<SettlementInfo.GoodsInfo> goodsInfos){
-        double totalCost = 0;
-        for(SettlementInfo.GoodsInfo goodsInfo: goodsInfos){
-            totalCost += goodsInfo.getCount()*goodsInfo.getPrice();
-        }
-        return retain2Decimals(totalCost);
-    }
-
-    /** 保留两位小数 */
-    protected double retain2Decimals(double value) {
-        // BigDecimal.ROUND_HALF_UP 代表四舍五入
-        return new BigDecimal(value)
-                .setScale(2, BigDecimal.ROUND_HALF_UP)
-                .doubleValue();
     }
 }

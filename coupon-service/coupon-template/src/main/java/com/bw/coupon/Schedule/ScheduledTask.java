@@ -40,13 +40,14 @@ public class ScheduledTask {
         for (CouponTemplate t: templates) {
             // 根据优惠券模板规则中的 "过期规则" 校验模板是否过期
             TemplateRuleVo rule = t.getRule();
-            if (rule.getExpiration().getDeadLine() < cur.getTime()) {
-                t.setExpired(true);
+            if (rule.getExpirationRule().getDeadLine() < cur.getTime()) {
+                t.setIsExpired(true);
                 expiredTemplates.add(t);
             }
         }
 
         if (CollectionUtils.isNotEmpty(expiredTemplates)) {
+            // todo 更改数据库和缓存状态
             //log.info("Expired CouponTemplate Num: {}", CouponTemplateDao.saveAll(expiredTemplates));
         }
         log.info("Done To Expire CouponTemplate.");

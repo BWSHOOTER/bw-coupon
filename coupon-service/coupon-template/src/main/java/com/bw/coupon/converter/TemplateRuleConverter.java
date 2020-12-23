@@ -10,7 +10,7 @@ import javax.persistence.Converter;
 import java.io.IOException;
 
 @Converter
-public class CouponRuleTemplateConverter implements AttributeConverter<TemplateRuleVo,String> {
+public class TemplateRuleConverter implements AttributeConverter<TemplateRuleVo,String> {
     @Autowired
     private ObjectMapper mapper;
 

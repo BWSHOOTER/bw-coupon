@@ -1,6 +1,6 @@
 package com.bw.coupon.executor;
 
-import com.bw.coupon.enumeration.DiscountEnum;
+import com.bw.coupon.enumeration.CalculatingMethodEnum;
 import com.bw.coupon.enumeration.RuleFlagEnum;
 import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.vo.SettlementInfo;
@@ -39,12 +39,12 @@ public class ExecutorManager implements BeanPostProcessor {
         List<SettlementInfo.CouponAndTemplateInfo> ctInfos = settlementInfo.getCouponAndTemplateInfos();
         // 单类优惠券
         if(ctInfos.size() == 1){
-            DiscountEnum discount = DiscountEnum.of(settlementInfo.getCouponAndTemplateInfos().
+            CalculatingMethodEnum discount = CalculatingMethodEnum.of(settlementInfo.getCouponAndTemplateInfos().
                     get(0).getTemplate().getDiscount());
-            if(discount == DiscountEnum.MinusDiscount){
+            if(discount == CalculatingMethodEnum.MinusDiscount){
                 res = executorIndex.get(RuleFlagEnum.MinusDiscount).computeRule(settlementInfo);
             }
-            else if(discount == DiscountEnum.MultiplyDiscount){
+            else if(discount == CalculatingMethodEnum.MultiplyDiscount){
                 res = executorIndex.get(RuleFlagEnum.MultiplyDiscount).computeRule(settlementInfo);
             }
         }

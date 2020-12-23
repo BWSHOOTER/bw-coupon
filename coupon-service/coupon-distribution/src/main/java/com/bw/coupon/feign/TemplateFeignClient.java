@@ -2,7 +2,7 @@ package com.bw.coupon.feign;
 
 import com.bw.coupon.feign.hystrix.TemplateFeignClientHystrix;
 import com.bw.coupon.vo.CommonResponse;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +23,7 @@ public interface TemplateFeignClient {
      * 127.0.0.1:7001/template/sdk/all
      */
     @RequestMapping(value = "/template/sdk/all", method = RequestMethod.GET)
-    CommonResponse<List<TemplateSDK>> findAllUsableTemplate();
+    CommonResponse<List<TemplateVo>> findAllUsableTemplate();
     //这里的方法名其实可以随便指定，因为关键是mapping的url，feignClient名称，以及方法的参数和响应
 
     /**
@@ -31,5 +31,5 @@ public interface TemplateFeignClient {
      * 127.0.0.1:7001/coupon-template/template/sdk/infos
      */
     @RequestMapping(value = "/template/sdk/infos", method = RequestMethod.GET)
-    CommonResponse<Map<Integer, TemplateSDK>> findIds2TemplateSDK(@RequestParam("ids") Collection<Integer> ids);
+    CommonResponse<Map<Integer, TemplateVo>> findIds2TemplateSDK(@RequestParam("ids") Collection<Integer> ids);
 }

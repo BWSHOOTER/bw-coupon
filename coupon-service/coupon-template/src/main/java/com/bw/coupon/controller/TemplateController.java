@@ -2,11 +2,11 @@ package com.bw.coupon.controller;
 
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.vo.CommonException;
-import com.bw.coupon.service.IBuildTemplateService;
+import com.bw.coupon.service.ITemplateCreatingService;
 import com.bw.coupon.service.ITemplateBaseService;
 import com.bw.coupon.util.JacksonUtil;
-import com.bw.coupon.vo.TemplateSDK;
-import com.bw.coupon.vo.TemplateRequestVo;
+import com.bw.coupon.vo.TemplateVo;
+import com.bw.coupon.vo.TemplateCreatingRequestVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,62 +18,57 @@ import java.util.Map;
 @Slf4j
 @RestController
 public class TemplateController {
-    /** 构建优惠券模板服务 */
-    private final IBuildTemplateService buildTemplateService;
-    /** 优惠券模板基础服务 */
+    private final ITemplateCreatingService templateCreatingService;
     private final ITemplateBaseService templateBaseService;
 
     private final JacksonUtil jackson;
     @Autowired
-    public TemplateController(IBuildTemplateService buildTemplateService, ITemplateBaseService templateBaseService, JacksonUtil jackson) {
-        this.buildTemplateService = buildTemplateService;
+    public TemplateController(ITemplateCreatingService templateCreatingService, ITemplateBaseService templateBaseService, JacksonUtil jackson) {
+        this.templateCreatingService = templateCreatingService;
         this.templateBaseService = templateBaseService;
         this.jackson = jackson;
     }
 
     /**
-     * 构建优惠券模板
-     * 127.0.0.1:7001/coupon-template/template/build
-     * 127.0.0.1:9000/bw-coupon-zuul/coupon-template/template/build
-     * */
+     * 1. 构建优惠券模板
+     *      原地址：127.0.0.1:7001/coupon-template/template/build
+     *      转发地址：127.0.0.1:9000/bw-coupon-zuul/coupon-template/template/build
+     */
     @PostMapping("/template/build")
-    public CouponTemplate buildTemplate(@RequestBody TemplateRequestVo request)
+    public CouponTemplate buildTemplate(@RequestBody TemplateCreatingRequestVo request)
             throws CommonException {
         log.info("Build Template: {}", jackson.writeValueAsString(request));
-        return buildTemplateService.buildCouponTemplate(request);
+        return templateCreatingService.createCouponTemplate(request);
     }
 
     /**
-     * 构造优惠券模板详情
-     * 127.0.0.1:7001/coupon-template/template/info?id=1
-     * */
+     * 2. 查询指定优惠券模板的Entity
+     *      原地址：127.0.0.1:7001/coupon-template/template/info?id=1
+     */
     @GetMapping("/template/info")
-    public CouponTemplate buildTemplateInfo(@RequestParam("id") Integer id)
+    public CouponTemplate findTemplateById(@RequestParam("id") Integer id)
             throws CommonException {
         log.info("Build Template Info For: {}", id);
-        return templateBaseService.buildTemplateInfo(id);
+        return templateBaseService.findTemplateById(id);
     }
 
     /**
-     * 查找所有可用的优惠券模板
-     * 127.0.0.1:7001/coupon-template/template/sdk/all
-     * sdk一般表示是提供给第三方/其它模块使用
-     * */
+     * 3. 查找所有可用的优惠券模板的Vo
+     *      原地址：127.0.0.1:7001/coupon-template/template/sdk/all
+     */
     @GetMapping("/template/sdk/all")
-    public List<TemplateSDK> findAllUsableTemplate() {
+    public List<TemplateVo> findAllUsableTemplate() {
         log.info("Find All Usable Template.");
         return templateBaseService.findAllUsableTemplate();
     }
 
     /**
-     * 获取模板 ids 到 CouponTemplateSDK 的映射
-     * 127.0.0.1:7001/coupon-template/template/sdk/infos
+     * 4. 获取模板 ids 到 TemplateVo 的映射
+     *      原地址：127.0.0.1:7001/coupon-template/template/sdk/infos
      */
     @GetMapping("/template/sdk/infos")
-    public Map<Integer, TemplateSDK> findIds2TemplateSDK(
-            @RequestParam("ids") Collection<Integer> ids
-    ) {
-        log.info("FindIds2TemplateSDK: {}", jackson.writeValueAsString(ids));
-        return templateBaseService.findIds2TemplateSDK(ids);
+    public Map<Integer, TemplateVo> findIds2TemplateVos(@RequestParam("ids") Collection<Integer> ids) {
+        log.info("FindIds2TemplateVos: {}", jackson.writeValueAsString(ids));
+        return templateBaseService.findIds2TemplateVos(ids);
     }
 }

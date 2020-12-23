@@ -10,14 +10,14 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum CustomerEnum {
+public enum CustomerTypeEnum {
     AllCustomer(920,"所有用户"),
     NewCustomer(921,"老用户"),
     OldCustomer(922,"新用户");
 
     private Integer code;
     private String desc;
-    public static CustomerEnum of(Integer code){
+    public static CustomerTypeEnum of(Integer code){
         if(code==null)
             throw new IllegalArgumentException("Enum CustomerEnum code is NULL!");
 

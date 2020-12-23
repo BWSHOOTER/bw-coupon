@@ -16,5 +16,5 @@ public class AcquireTemplateRequest {
     private Long userId;
 
     /** 优惠券模板信息 */
-    private TemplateSDK templateSDK;
+    private TemplateVo templateVo;
 }

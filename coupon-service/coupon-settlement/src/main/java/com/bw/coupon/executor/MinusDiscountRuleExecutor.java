@@ -1,8 +1,9 @@
 package com.bw.coupon.executor;
 
 import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.util.PriceUtil;
 import com.bw.coupon.vo.SettlementInfo;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -34,10 +35,10 @@ public class MinusDiscountRuleExecutor extends AbstractRuleExecutor{
             return processGoodsTypeNotSatisfy(settlementInfo);
         }
 
-        double totalCost = calGoodsTotalCost(settlementInfo.getGoodsInfos());
+        double totalCost = PriceUtil.calGoodsTotalCost(settlementInfo.getGoodsInfos());
 
         // 判断满减是否符合折扣标准
-        TemplateSDK sdk = settlementInfo.getCouponAndTemplateInfos().get(0).getTemplate();
+        TemplateVo sdk = settlementInfo.getCouponAndTemplateInfos().get(0).getTemplate();
         double base = sdk.getRule().getDiscount().getBase();
         double quota = sdk.getRule().getDiscount().getQuota();
 

@@ -7,7 +7,7 @@ import com.bw.coupon.service.ITemplateService;
 import com.bw.coupon.util.JacksonUtil;
 import com.bw.coupon.vo.AcquireTemplateRequest;
 import com.bw.coupon.vo.SettlementInfo;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +31,7 @@ public class CouponController {
         this.jackson = jacksonUtil;
     }
 
-    /** 根据用户Id和优惠券状态 查找优惠券记录 */
+    /** 功能1. 根据用户Id和优惠券状态 查找优惠券记录 */
     @RequestMapping(value = "/coupons", method = RequestMethod.GET)
     public List<Coupon> findUserCouponsByStatus(@RequestParam("userId") Long userId,
                                                 @RequestParam("status") Integer status)
@@ -40,23 +40,23 @@ public class CouponController {
         return couponService.findUserCouponsByStatus(userId, status);
     }
 
-    /** 根据用户Id，查找所有可领取的优惠券模板 */
+    /** 功能2. 根据用户Id，查找所有可领取的优惠券模板 */
     @RequestMapping(value = "template", method = RequestMethod.GET)
-    public List<TemplateSDK> findAvailableTemplate(@RequestParam("userId") Long userId)
+    public List<TemplateVo> findAvailableTemplate(@RequestParam("userId") Long userId)
         throws CommonException{
         log.info("Find User [{}] Available Coupon Template",userId);
         return templateService.findAvailableTemplateByUserId(userId);
     }
 
-    /** 用户领取一个优惠券记录 */
+    /** 功能3. 用户领取一个优惠券记录 */
     @RequestMapping(value = "/newCoupon", method = RequestMethod.POST)
     public Coupon acquireCoupon(@RequestBody AcquireTemplateRequest request) throws CommonException{
         log.info("User [{}] Try to Acquire Coupon, TemplateId: {}",
-                request.getUserId(), request.getTemplateSDK().getId());
+                request.getUserId(), request.getTemplateVo().getId());
         return couponService.acquireCoupon(request);
     }
 
-    /** 结算（核销）优惠券 */
+    /** 功能4. 结算（核销）优惠券 */
     @RequestMapping(value = "/settlement", method = RequestMethod.POST)
     public SettlementInfo settlement(@RequestBody SettlementInfo settlementInfo)
         throws CommonException{

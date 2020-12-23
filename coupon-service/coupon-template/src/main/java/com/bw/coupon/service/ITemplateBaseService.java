@@ -2,7 +2,7 @@ package com.bw.coupon.service;
 
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.vo.CommonException;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,17 +16,17 @@ public interface ITemplateBaseService {
     /**
      * 根据优惠券模板 id 获取优惠券模板信息
      */
-    CouponTemplate buildTemplateInfo(Integer id) throws CommonException;
+    CouponTemplate findTemplateById(Integer id) throws CommonException;
 
     /**
      * 查找所有可用的优惠券模板
      */
-    List<TemplateSDK> findAllUsableTemplate();
+    List<TemplateVo> findAllUsableTemplate();
 
     /**
-     * 获取模板 ids 到 CouponTemplateSDK 的映射
+     * 获取模板 ids 到 CouponTemplateVos 的映射
      * ids 模板 ids
-     * Map<sn: 模板 id， value: CouponTemplateSDK>
+     * Map<sn: 模板 id， value: TemplateVo>
      */
-    Map<Integer, TemplateSDK> findIds2TemplateSDK(Collection<Integer> ids);
+    Map<Integer, TemplateVo> findIds2TemplateVos(Collection<Integer> ids);
 }

@@ -10,12 +10,12 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum DiscountEnum {
+public enum CalculatingMethodEnum {
     MinusDiscount(901,"减法折扣"),
     MultiplyDiscount(902,"乘法折扣");
 
     //一般通过一个值返回枚举，都叫of
-    public static DiscountEnum of(Integer code){
+    public static CalculatingMethodEnum of(Integer code){
         /*
         //如果为空，则抛出一个异常
         //尽早抛出 fail-fast思想

@@ -27,21 +27,22 @@ public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
         generator.writeStartObject();
 
         generator.writeStringField("id", template.getId().toString());
-        generator.writeStringField("name", template.getName());
+        generator.writeStringField("displayName", template.getDisplayName());
         generator.writeStringField("logo", template.getLogo());
         generator.writeStringField("intro", template.getIntro());
-        generator.writeStringField("discount",
-                template.getDiscount().getDesc());
-        generator.writeStringField("productLine",
-                template.getProductLine().getDesc());
-        generator.writeStringField("count", template.getCount().toString());
+        generator.writeStringField("calculatingMethod",
+                template.getCalculatingMethod().getDesc());
+        generator.writeStringField("goodsCategory",
+                template.getGoodsCategory().getDesc());
+        generator.writeStringField("distributionAmount",
+                template.getDistributionAmount().toString());
         generator.writeStringField("createTime",
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(template.getCreateTime()));
-        generator.writeStringField("userId", template.getUserId().toString());
+        generator.writeStringField("creatorId", template.getCreatorId().toString());
         generator.writeStringField("sn",
-                template.getKey() + String.format("%04d", template.getId()));
-        generator.writeStringField("customer",
-                template.getCustomer().getDesc());
+                template.getSn() + String.format("%04d", template.getId()));
+        generator.writeStringField("customerType",
+                template.getCustomerType().getDesc());
         generator.writeStringField("rule",
                 mapper.writeValueAsString(template.getRule()));
 

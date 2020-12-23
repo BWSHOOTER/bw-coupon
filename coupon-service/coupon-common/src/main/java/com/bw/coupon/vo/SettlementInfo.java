@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 结算信息对象定义
@@ -18,52 +19,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SettlementInfo {
-    /** 用户 id */
-    private Long userId;
+    /** 1.用户 id */
+    private Long customerId;
 
-    /** 商品信息 */
+    /** 2.商品列表 */
     private List<GoodsInfo> goodsInfos;
 
-    /** 优惠券列表 */
-    private List<CouponAndTemplateInfo> couponAndTemplateInfos;
-
-    /** 是否使结算生效, 即核销
-     *  true：核销  false：结算
-     */
+    /** 3.是结算还是核销。 true：核销  false：结算 */
     private Boolean employ;
 
-    /** 结果结算金额 */
+    /** 优惠券与其模板信息CouponAndTemplateInfo列表 */
+    private List<CouponAndTemplateInfo> couponAndTemplateInfos;
+
+    /** 5. 结果结算金额 */
     private Double cost;
 
     /**
-     * 优惠券和模板信息
+     * 优惠券Id与其模板信息打包的对象
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CouponAndTemplateInfo {
         /** Coupon 的主键 */
-        private Integer id;
+        private Integer couponId;
         /** 优惠券对应的模板对象 */
-        private TemplateSDK template;
-    }
-
-    /**
-     * fake 商品信息
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class GoodsInfo {
-
-        /** 商品产品线*/
-        private Integer productLine;
-
-        /** 商品价格 */
-        private Double price;
-
-        /** 商品数量 */
-        private Integer count;
+        private TemplateVo templateVo;
     }
 }
 

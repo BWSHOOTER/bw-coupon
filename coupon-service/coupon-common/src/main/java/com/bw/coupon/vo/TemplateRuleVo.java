@@ -1,7 +1,6 @@
 package com.bw.coupon.vo;
 
-import com.bw.coupon.enumeration.DistributeEnum;
-import com.bw.coupon.enumeration.ExpirationEnum;
+import com.bw.coupon.enumeration.ExpirationTypeEnum;
 import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,16 +19,29 @@ import java.util.List;
 @AllArgsConstructor
 public class TemplateRuleVo {
 
-    private ExpirationRuleTemplate expiration;
-    private DiscountRuleTemplate discount;
-    private CustomerRuleTemplate customer;
-    private DistributeRuleTemplate distribute;
-    private Integer limitation;
-    private List<GoodsCategoryRuleTemplate> goodsCategories;
+    private ExpirationRuleVo expirationRule;
+    private CalculatingRuleVo calculatingRule;
+    //private Integer limitation;
+    //private CustomerRuleTemplate customerType;
+    //private DistributeRuleTemplate distribute;
+    //private List<GoodsCategoryRuleVo> goodsCategories;
 
     // todo
     public boolean validate(){
         return true;
+    }
+
+    /**
+     * 折扣计算规则
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CalculatingRuleVo{
+        // 对应CalculatingMethodEnum的code
+        private Integer type;
+        private Integer quota;
+        private Integer base;
     }
 
     /**
@@ -38,18 +50,18 @@ public class TemplateRuleVo {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ExpirationRuleTemplate{
-        // 对应ExpirationEnum的code
+    public static class ExpirationRuleVo{
+        // 对应ExpirationTypeEnum的code
         private Integer type;
         private Long gap;
         private Long deadLine;
 
-        public ExpirationRuleTemplate(Integer type,Long mills){
+        public ExpirationRuleVo(Integer type,Long mills){
             this.type = type;
-            if(type == ExpirationEnum.RegularExpiration.getCode()){
+            if(type == ExpirationTypeEnum.RegularExpiration.getCode()){
                 this.deadLine = mills;
             }
-            else if(type == ExpirationEnum.ShiftExpiration.getCode()){
+            else if(type == ExpirationTypeEnum.ShiftExpiration.getCode()){
                 Long dll = new Date().getTime() + mills;
                 Date dl = new Date(dll);
                 this.deadLine = DateUtils.addMilliseconds(dl,1).getTime();
@@ -57,54 +69,47 @@ public class TemplateRuleVo {
         }
     }
 
-    /**
-     * 折扣规则
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class DiscountRuleTemplate{
-        // 对应DiscountEnum的code
-        private Integer type;
-        private Integer quota;
-        private Integer base;
-    }
-
-    /**
-     * 面向用户规则
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CustomerRuleTemplate{
-        // 对应CustomerEnum的code
-        private Integer type;
-    }
 
     /**
      * 发放规则
      */
+    /*
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DistributeRuleTemplate{
-        // 对应DistributeEnum的code
+    public static class DistributionMethodRuleVo{
+        // 对应DistributionMethodEnum的code
         private Integer type;
     }
+     */
 
     /**
      * 适用商品品类
      */
+    /*
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class GoodsCategoryRuleTemplate{
+    public static class GoodsCategoryRuleVo{
         private Integer code;
         private String desc;
-
-        public GoodsCategoryRuleTemplate(GoodsCategoryEnum goodsCategoryEnum){
+        public GoodsCategoryRuleVo(GoodsCategoryEnum goodsCategoryEnum){
             this.code = goodsCategoryEnum.getCode();
             this.desc = goodsCategoryEnum.getDesc();
         }
     }
+     */
+
+    /**
+     * 面向用户规则
+     */
+    /*
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CustomerTypeRuleVo{
+        // 对应CustomerEnum的code
+        private Integer type;
+    }
+     */
 }

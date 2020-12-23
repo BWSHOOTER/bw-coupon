@@ -2,11 +2,9 @@ package com.bw.coupon.vo;
 
 import com.bw.coupon.entity.Coupon;
 import com.bw.coupon.enumeration.CouponStatusEnum;
-import com.bw.coupon.enumeration.ExpirationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +34,7 @@ public class CouponClassify {
             // 判断优惠券是否过期
             boolean isTimeExpire;
             long curTime = new Date().getTime();
-            isTimeExpire = c.getTemplateSDK().getRule().getExpiration().getDeadLine() <= curTime;
+            isTimeExpire = c.getTemplateVo().getRule().getExpiration().getDeadLine() <= curTime;
             /*
             if (c.getTemplateSDK().getRule().getExpiration().getType().
                     equals(ExpirationEnum.RegularExpiration.getCode())) {

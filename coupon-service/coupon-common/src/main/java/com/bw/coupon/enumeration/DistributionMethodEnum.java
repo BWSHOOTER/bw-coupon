@@ -3,7 +3,6 @@ package com.bw.coupon.enumeration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -11,14 +10,14 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum DistributeEnum {
+public enum DistributionMethodEnum {
     SingleDistribute(911,"单用户领取"),
     MultiDistribute(912,"多用户群发");
 
     private Integer code;
     private String desc;
 
-    public static DistributeEnum of(Integer code){
+    public static DistributionMethodEnum of(Integer code){
         if(code==null)
             throw new IllegalArgumentException("Enum DistributeEnum code is NULL!");
 

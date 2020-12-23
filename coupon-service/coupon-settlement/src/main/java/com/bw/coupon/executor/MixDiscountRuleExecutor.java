@@ -1,14 +1,12 @@
 package com.bw.coupon.executor;
 
-import com.bw.coupon.enumeration.DiscountEnum;
+import com.bw.coupon.enumeration.CalculatingMethodEnum;
 import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.util.PriceUtil;
 import com.bw.coupon.vo.SettlementInfo;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.Iterator;
 
 @Slf4j
 @Component
@@ -36,14 +34,14 @@ public class MixDiscountRuleExecutor extends AbstractRuleExecutor{
             return processGoodsTypeNotSatisfy(settlementInfo);
         }
 
-        double totalCost = calGoodsTotalCost(settlementInfo.getGoodsInfos());
+        double totalCost = PriceUtil.calGoodsTotalCost(settlementInfo.getGoodsInfos());
 
         // 获得
-        TemplateSDK minusSdk = null, multiplySdk = null;
+        TemplateVo minusSdk = null, multiplySdk = null;
         for(SettlementInfo.CouponAndTemplateInfo ctInfo : settlementInfo.getCouponAndTemplateInfos()){
-            if(ctInfo.getTemplate().getDiscount() == DiscountEnum.MinusDiscount.getCode())
+            if(ctInfo.getTemplate().getDiscount() == CalculatingMethodEnum.MinusDiscount.getCode())
                 minusSdk = ctInfo.getTemplate();
-            else if(ctInfo.getTemplate().getDiscount() == DiscountEnum.MultiplyDiscount.getCode())
+            else if(ctInfo.getTemplate().getDiscount() == CalculatingMethodEnum.MultiplyDiscount.getCode())
                 multiplySdk = ctInfo.getTemplate();
         }
         if(minusSdk==null || multiplySdk==null){

@@ -6,9 +6,8 @@ import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.feign.TemplateFeignClient;
 import com.bw.coupon.service.ITemplateService;
 import com.bw.coupon.service.ICouponService;
-import com.bw.coupon.vo.TemplateSDK;
+import com.bw.coupon.vo.TemplateVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.bw.coupon.util.TemplateUtil;
 
@@ -36,14 +35,14 @@ public class TemplateServiceImpl implements ITemplateService {
      * 4. 返回剩下的模板列表
      */
     @Override
-    public List<TemplateSDK> findAvailableTemplateByUserId(Long userId) throws CommonException {
+    public List<TemplateVo> findAvailableTemplateByUserId(Long userId) throws CommonException {
         // 1. 获取所有优惠券模板
-        List<TemplateSDK> UnfilteredTemplateSDKS = templateFeignClient.findAllUsableTemplate().getData();
-        log.debug("Find all Template From TemplateClient Count:{}", UnfilteredTemplateSDKS.size());
+        List<TemplateVo> unfilteredTemplateVos = templateFeignClient.findAllUsableTemplate().getData();
+        log.debug("Find all Template From TemplateClient Count:{}", unfilteredTemplateVos.size());
 
         // 2. 过滤过期的优惠券模板
-        Map<Integer, TemplateSDK> templateSdkMap = new HashMap<>(UnfilteredTemplateSDKS.size());
-        for(TemplateSDK sdk: UnfilteredTemplateSDKS) {
+        Map<Integer, TemplateVo> templateSdkMap = new HashMap<>(unfilteredTemplateVos.size());
+        for(TemplateVo sdk: unfilteredTemplateVos) {
             if (!TemplateUtil.isExpiredByTemplateSDK(sdk)) {
                 templateSdkMap.put(sdk.getId(), sdk);
             }
@@ -68,7 +67,7 @@ public class TemplateServiceImpl implements ITemplateService {
         }
 
         // 5. 将剔除后的Map转为List并返回
-        List<TemplateSDK> result = new ArrayList<>(templateSdkMap.size());
+        List<TemplateVo> result = new ArrayList<>(templateSdkMap.size());
         for(Integer id: templateSdkMap.keySet()){
             result.add(templateSdkMap.get(id));
         }
