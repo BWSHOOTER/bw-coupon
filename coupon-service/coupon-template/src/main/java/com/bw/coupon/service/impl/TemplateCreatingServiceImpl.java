@@ -46,6 +46,7 @@ public class TemplateCreatingServiceImpl implements ITemplateCreatingService {
             throw new CommonException("Exist Same Name Template!");
         }
         // 3. 根据 request 构造 CouponTemplate
+        // todo 构造模板编码并赋值
         CouponTemplate templateEntity = request.toEntity();
 
         // 4. 将 CouponTemplate 保存到数据库中（返回的 CouponTemplate 具有了完整映射信息）

@@ -34,7 +34,7 @@ public class CouponClassify {
             // 判断优惠券是否过期
             boolean isTimeExpire;
             long curTime = new Date().getTime();
-            isTimeExpire = c.getTemplateVo().getRule().getExpiration().getDeadLine() <= curTime;
+            isTimeExpire = c.getTemplateVo().getRule().getExpirationRule().getDeadLine() <= curTime;
             /*
             if (c.getTemplateSDK().getRule().getExpiration().getType().
                     equals(ExpirationEnum.RegularExpiration.getCode())) {

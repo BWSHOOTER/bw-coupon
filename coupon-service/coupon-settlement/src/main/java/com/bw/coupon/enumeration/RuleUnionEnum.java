@@ -8,13 +8,13 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RuleFlagEnum {
+public enum RuleUnionEnum {
     // 单类别优惠券定义
-    MinusDiscount("减法优惠"),
-    MultiplyDiscount("乘法优惠"),
+    MinusSingle("减法优惠"),
+    MultiplySingle("乘法优惠"),
 
     // 多类别优惠券定义
-    MixDiscount("先减再乘优惠");
+    MinusUnionMultiply("先减再乘优惠");
 
     // todo 更多组合
 

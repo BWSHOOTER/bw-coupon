@@ -1,7 +1,7 @@
 package com.bw.coupon.executor;
 
 import com.bw.coupon.enumeration.CalculatingMethodEnum;
-import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.enumeration.RuleUnionEnum;
 import com.bw.coupon.util.PriceUtil;
 import com.bw.coupon.vo.SettlementInfo;
 import com.bw.coupon.vo.TemplateVo;
@@ -10,17 +10,16 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class MixDiscountRuleExecutor extends AbstractRuleExecutor{
+public class MinusUnionMultiplyRuleExecutor extends AbstractRuleExecutor{
     /**
      * 规则类型定义
      */
     @Override
-    public RuleFlagEnum ruleConfig() {
-        return RuleFlagEnum.MixDiscount;
+    public RuleUnionEnum ruleConfig() {
+        return RuleUnionEnum.MinusUnionMultiply;
     }
 
     /**
-     * @param settlementInfo
      * @Description: 优惠券规则计算
      * @Author: BaoWei
      * @Date: 2020/12/21 16:57
@@ -30,28 +29,28 @@ public class MixDiscountRuleExecutor extends AbstractRuleExecutor{
     @Override
     public SettlementInfo computeRule(SettlementInfo settlementInfo) {
         if(!isGoodsTypeSatisfy(settlementInfo)){
-            log.debug("MixDiscount Template is not match to goodsType!");
+            log.debug("MinusUnionMultiply SettlementRule is not match to goodsType!");
             return processGoodsTypeNotSatisfy(settlementInfo);
         }
 
         double totalCost = PriceUtil.calGoodsTotalCost(settlementInfo.getGoodsInfos());
 
         // 获得
-        TemplateVo minusSdk = null, multiplySdk = null;
+        TemplateVo minusTemplate = null, multiplyTemplate = null;
         for(SettlementInfo.CouponAndTemplateInfo ctInfo : settlementInfo.getCouponAndTemplateInfos()){
-            if(ctInfo.getTemplate().getDiscount() == CalculatingMethodEnum.MinusDiscount.getCode())
-                minusSdk = ctInfo.getTemplate();
-            else if(ctInfo.getTemplate().getDiscount() == CalculatingMethodEnum.MultiplyDiscount.getCode())
-                multiplySdk = ctInfo.getTemplate();
+            if(ctInfo.getTemplateVo().getCalculatingMethodCode() == CalculatingMethodEnum.MinusCalculate.getCode())
+                minusTemplate = ctInfo.getTemplateVo();
+            else if(ctInfo.getTemplateVo().getCalculatingMethodCode() == CalculatingMethodEnum.MultiplyCalculate.getCode())
+                multiplyTemplate = ctInfo.getTemplateVo();
         }
-        if(minusSdk==null || multiplySdk==null){
+        if(minusTemplate==null || multiplyTemplate==null){
             return null;
         }
 
-        double baseMinus = minusSdk.getRule().getDiscount().getBase();
-        double baseMultiply = multiplySdk.getRule().getDiscount().getBase();
-        double quotaMinus = minusSdk.getRule().getDiscount().getQuota();
-        double quotaMultiply = multiplySdk.getRule().getDiscount().getQuota();
+        double baseMinus = minusTemplate.getRule().getCalculatingRule().getBase();
+        double baseMultiply = multiplyTemplate.getRule().getCalculatingRule().getBase();
+        double quotaMinus = minusTemplate.getRule().getCalculatingRule().getQuota();
+        double quotaMultiply = multiplyTemplate.getRule().getCalculatingRule().getQuota();
 
         double discountMinus = 0;
         double discountMultiply = 0;

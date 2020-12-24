@@ -17,31 +17,29 @@ import java.util.stream.Collectors;
 public class CouponSnUtil {
     /**
      * 构造优惠券码
-     * 优惠券码(对应于每一张优惠券, 18位)
-     *  前四位: 产品线 + 类型
-     *  中间六位: 日期随机(190101)
-     *  后八位: 0 ~ 9 随机数构成
+     * 优惠券码(对应于每一张优惠券, X位)
+     *  前8位: 模板日期 yyMMddHH
+     *  中间X位: 模板编码
+     *  后8位: 随机8位，不以0开头
      */
     @SuppressWarnings("all")
-    public static Set<String> buildCouponCodeSet(CouponTemplate template) {
+    public static Set<String> buildCouponSnSet(CouponTemplate template) {
         // 计时开始
         Stopwatch watch = Stopwatch.createStarted();
 
         Set<String> result = new HashSet<>(template.getDistributionAmount());
 
-        // 前四位
-        String prefix4 = template.getGoodsCategory().getCode().toString()
-                + template.getCalculatingMethod().getCode().toString();
-        String date = new SimpleDateFormat("yyMMdd")
-                .format(template.getCreateTime());
+        // 前X位
+        String prefix = new SimpleDateFormat("yyMMddHH").format(template.getCreateTime()) +
+                        template.getSn();
 
         int amount = template.getDistributionAmount();
         for (int i = 0; i < amount; ++i) {
-            result.add(prefix4 + buildCouponCodeSuffix14(date));
+            result.add(prefix + buildCouponSnLast());
         }
         // 防止上面出现重复
         while (result.size() < amount) {
-            result.add(prefix4 + buildCouponCodeSuffix14(date));
+            result.add(prefix + buildCouponSnLast());
         }
 
         // 断言：结果集的券码数是否为模板拟分发总数
@@ -56,21 +54,17 @@ public class CouponSnUtil {
         return result;
     }
 
-    /** 构造优惠券码的后 14 位 */
-    private static String buildCouponCodeSuffix14(String date) {
-        char[] bases = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-        // 中间六位
+    /** 构造优惠券码中间日期的8位：20052115 */
+    private static String buildCouponSnDate8(String date) {
         List<Character> chars = date.chars()
                 .mapToObj(e -> (char) e).collect(Collectors.toList());
         Collections.shuffle(chars);
-        String mid6 = chars.stream()
-                .map(Object::toString).collect(Collectors.joining());
+        return chars.stream().map(Object::toString).collect(Collectors.joining());
+    }
 
-        // 后八位
-        String suffix8 = RandomStringUtils.random(1, bases)
-                + RandomStringUtils.randomNumeric(7);
-
-        return mid6 + suffix8;
+    /** 构造优惠券码末尾随机的8位，且不以0开头 */
+    private static String buildCouponSnLast(){
+        char[] bases = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        return RandomStringUtils.random(1, bases) + RandomStringUtils.randomNumeric(7);
     }
 }

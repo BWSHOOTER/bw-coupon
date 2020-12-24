@@ -20,8 +20,8 @@ public enum GoodsCategoryEnum {
     ApplianceProduct(945,"电器"),
     EatingProduct(946,"食品");
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     public static GoodsCategoryEnum of(Integer code){
         if(code==null)
@@ -42,7 +42,6 @@ public enum GoodsCategoryEnum {
         }
         return list;
     }
-
     /** 将枚举列表转换成多个code组成的String */
     public static String listToCodesStr(List<GoodsCategoryEnum> list) {
         String[] codes = new String[list.size()];

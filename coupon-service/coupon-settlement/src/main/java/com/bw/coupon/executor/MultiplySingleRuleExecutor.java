@@ -1,6 +1,6 @@
 package com.bw.coupon.executor;
 
-import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.enumeration.RuleUnionEnum;
 import com.bw.coupon.util.PriceUtil;
 import com.bw.coupon.vo.SettlementInfo;
 import com.bw.coupon.vo.TemplateVo;
@@ -11,14 +11,13 @@ import java.util.Collections;
 
 @Slf4j
 @Component
-public class MinusDiscountRuleExecutor extends AbstractRuleExecutor{
-
+public class MultiplySingleRuleExecutor extends AbstractRuleExecutor{
     /**
      * 规则类型定义
      */
     @Override
-    public RuleFlagEnum ruleConfig() {
-        return RuleFlagEnum.MinusDiscount;
+    public RuleUnionEnum ruleConfig() {
+        return RuleUnionEnum.MultiplySingle;
     }
 
     /**
@@ -31,29 +30,28 @@ public class MinusDiscountRuleExecutor extends AbstractRuleExecutor{
     @Override
     public SettlementInfo computeRule(SettlementInfo settlementInfo) {
         if(!isGoodsTypeSatisfy(settlementInfo)){
-            log.debug("MinusDiscount Template is not match to goodsType!");
+            log.debug("MultiplyDiscount Template is not match to goodsType!");
             return processGoodsTypeNotSatisfy(settlementInfo);
         }
 
         double totalCost = PriceUtil.calGoodsTotalCost(settlementInfo.getGoodsInfos());
 
         // 判断满减是否符合折扣标准
-        TemplateVo sdk = settlementInfo.getCouponAndTemplateInfos().get(0).getTemplate();
-        double base = sdk.getRule().getDiscount().getBase();
-        double quota = sdk.getRule().getDiscount().getQuota();
+        TemplateVo template = settlementInfo.getCouponAndTemplateInfos().get(0).getTemplateVo();
+        double quota = template.getRule().getCalculatingRule().getQuota();
+        double base = template.getRule().getCalculatingRule().getBase();
 
         // 如果不符合最低金额，直接返回总价
         if(totalCost<base){
-            log.debug("[TotalCost] {} < [base] {}!", totalCost, base);
-            settlementInfo.setCost(totalCost);
             settlementInfo.setCouponAndTemplateInfos(Collections.emptyList());
+            settlementInfo.setCost(totalCost);
+            log.debug("[TotalCost] {} < [base] {}!", totalCost, base);
             return settlementInfo;
         }
 
         // 计算使用优惠券之后的价格
-        settlementInfo.setCost(totalCost - quota > 0? totalCost - quota : 0);
-        log.debug("Using MinusDiscount Coupon Make Cost From {} to {}",
-                totalCost, settlementInfo.getCost());
+        settlementInfo.setCost(totalCost*quota);
+        log.debug("Using MultiplyDiscount Coupon Make Cost From {} to {}", totalCost, settlementInfo.getCost());
 
         return settlementInfo;
     }

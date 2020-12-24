@@ -33,16 +33,14 @@ public class CouponCreatingServiceImpl implements ICouponCreatingService {
     @SuppressWarnings("all")
     public void asyncConstructCouponByTemplate(CouponTemplate template) {
         //1. 生成优惠券码的Set
-        Set<String> couponCodes = CouponSnUtil.buildCouponCodeSet(template);
+        Set<String> couponSnSet = CouponSnUtil.buildCouponSnSet(template);
 
         // 计时，可不要
         Stopwatch watch = Stopwatch.createStarted();
         //2. 生成优惠券集合在Redis中的Key：如coupon_template_code_1
-        String redisKey = String.format("%s%s",
-                Constant.RedisPrefix.COUPON_TEMPLATE, template.getId().toString());
+        String redisKey = String.format("%s%s", Constant.RedisPrefix.COUPON_PREFIX, template.getSn());
         //3. 将优惠券码放入Redis的集合中
-        log.info("Push CouponCode To Redis: {}",
-                redisTemplate.opsForList().rightPushAll(redisKey, couponCodes));
+        log.info("Push CouponCode To Redis: {}", redisTemplate.opsForList().rightPushAll(redisKey, couponSnSet));
         // 计时结束
         watch.stop();
         log.info("Save CouponCodeSet To Redis By Template[id = {}] Cost：{}ms.",

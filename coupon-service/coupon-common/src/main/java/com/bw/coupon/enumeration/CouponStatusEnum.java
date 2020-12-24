@@ -16,16 +16,12 @@ public enum  CouponStatusEnum {
     USED("已使用",2),
     EXPIRED("已过期",3);
 
-    private String intro;
-    private Integer code;
+    private final String intro;
+    private final Integer code;
 
-    /**
-     * 根据 code 获取到 CouponStatusEnum
-     * */
+    /** 根据 code 获取到 CouponStatusEnum */
     public static CouponStatusEnum of(Integer code) {
-
         Objects.requireNonNull(code);
-
         return Stream.of(values())
                 .filter(bean -> bean.code.equals(code))
                 .findAny()

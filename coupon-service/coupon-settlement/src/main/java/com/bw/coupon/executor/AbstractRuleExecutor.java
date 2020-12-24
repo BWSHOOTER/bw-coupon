@@ -3,12 +3,7 @@ package com.bw.coupon.executor;
 import com.bw.coupon.util.PriceUtil;
 import com.bw.coupon.vo.GoodsInfo;
 import com.bw.coupon.vo.SettlementInfo;
-import com.bw.coupon.vo.TemplateRuleVo;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @Description: 规则执行器抽象类，定义一些通用方法

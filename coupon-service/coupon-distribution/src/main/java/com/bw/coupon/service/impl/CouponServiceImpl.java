@@ -66,7 +66,8 @@ public class CouponServiceImpl implements ICouponService {
      * 4. 此时再对无效优惠券进行剔除，如果status为可用、已过期，则重新分类，并更新cache和数据库，最后返回
      */
     @Override
-    public List<Coupon> findUserCouponsByStatus(Long userId, Integer status) throws CommonException {
+    public List<Coupon> findUserCouponsByStatus(Long userId, Integer status)
+            throws CommonException {
         List<Coupon> preTarget;
         /********************* 查询有效的优惠券 *********************/
         // 1. 从Cache中读取缓存的优惠券记录。
@@ -85,7 +86,8 @@ public class CouponServiceImpl implements ICouponService {
         else {
             log.debug("coupon cache is empty, get coupon from db: {}, {}", userId, status);
             // 查数据库
-            List<Coupon> dbCoupons = couponDao.findAllByUserIdAndStatus(userId, CouponStatusEnum.of(status));
+            List<Coupon> dbCoupons = couponDao.findAllByUserIdAndStatus(userId,
+                    CouponStatusEnum.of(status));
 
             // 数据库没查到：直接返回null。因为 Cache 中已经加入了一张无效的优惠券
             if (CollectionUtils.isEmpty(dbCoupons)) {
@@ -115,7 +117,8 @@ public class CouponServiceImpl implements ICouponService {
         CouponClassify classify = new CouponClassify(preTarget);
         // 如果已过期状态不为空, 需要做延迟处理
         if (CollectionUtils.isNotEmpty(classify.getExpired())) {
-            log.info("Add Expired Coupons To Cache From FindCouponsByStatus: {}, {}", userId, status);
+            log.info("Add Expired Coupons To Cache From FindCouponsByStatus: {}, {}",
+                    userId, status);
             // 更新Cache
             redisService.addCouponToCache(
                     userId,
@@ -180,10 +183,10 @@ public class CouponServiceImpl implements ICouponService {
                     request.getTemplateVo().getId());
             throw new CommonException("Can Not Acquire Template From TemplateClient");
         }
-        TemplateVo sdk = map.get(templateId);
+        TemplateVo templateVo = map.get(templateId);
 
         // 2. 判断此SDK是否过期
-        if(TemplateUtil.isExpiredByTemplateSDK(sdk)){
+        if(TemplateUtil.isExpiredByTemplateSDK(templateVo)){
             log.error("Template Expire: {}", templateId);
             throw new CommonException("Template Expire");
         }
@@ -191,14 +194,14 @@ public class CouponServiceImpl implements ICouponService {
         // 3. 判断判断用户是否符合领取规则 todo
 
         // 4. 判断用户是否达到领取上限
-        int limit = sdk.getRule().getLimitation();
+        int amount = templateVo.getDistributionAmount();
         List<Coupon> userUsableCoupons = findUserCouponsByStatus(userId, CouponStatusEnum.USABLE.getCode());
         for(Coupon coupon: userUsableCoupons){
             if(coupon.getTemplateId() == templateId){
-                limit--;
+                amount--;
             }
         }
-        if(limit<=0){
+        if(amount<=0){
             log.error("Exceed Template Assign Limitation: {}" + templateId);
             throw new CommonException("Exceed Template Assign Limitation");
         }
@@ -236,7 +239,7 @@ public class CouponServiceImpl implements ICouponService {
         if (CollectionUtils.isEmpty(ctInfos)) {
             log.info("Empty Coupons For Settle.");
             double goodsSum = 0.0;
-            for (SettlementInfo.GoodsInfo gi : info.getGoodsInfos()) {
+            for (GoodsInfo gi : info.getGoodsInfos()) {
                 goodsSum += gi.getPrice() * gi.getCount();
             }
             // 没有优惠券也就不存在优惠券的核销, SettlementInfo 其他的字段不需要修改
@@ -245,14 +248,14 @@ public class CouponServiceImpl implements ICouponService {
         }
 
         // 校验传递的优惠券是否在该用户可用优惠券集合中
-        List<Coupon> usableCoupons = findUserCouponsByStatus(info.getUserId(), CouponStatusEnum.USABLE.getCode());
+        List<Coupon> usableCoupons = findUserCouponsByStatus(info.getCustomerId(), CouponStatusEnum.USABLE.getCode());
         Map<Integer, Coupon> userCouponMap = new HashMap<>(usableCoupons.size());
         for(Coupon coupon: usableCoupons){
             userCouponMap.put(coupon.getId(), coupon);
         }
         List<Coupon> toUseCoupons = new ArrayList<>(ctInfos.size());
         for(SettlementInfo.CouponAndTemplateInfo ctinfo: ctInfos){
-            Integer couponId = ctinfo.getId();
+            Integer couponId = ctinfo.getCouponId();
             if(!userCouponMap.containsKey(couponId)){
                 log.error("Coupon is Not User's: {}", couponId);
                 throw new CommonException("Coupon is Not User's: " + couponId);
@@ -266,12 +269,12 @@ public class CouponServiceImpl implements ICouponService {
         if (processedInfo.getEmploy()
                 /*&& CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())*/) {
             log.info("Settle User Coupon: {}, {}",
-                    info.getUserId(),
+                    info.getCustomerId(),
                     jackson.writeValueAsString(toUseCoupons));
             // 将这些券的状态由可使用改成已使用
             // 更新缓存
             redisService.addCouponToCache(
-                    info.getUserId(),
+                    info.getCustomerId(),
                     toUseCoupons,
                     CouponStatusEnum.USED.getCode()
             );

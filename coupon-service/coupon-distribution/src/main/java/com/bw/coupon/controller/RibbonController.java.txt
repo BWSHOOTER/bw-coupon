@@ -1,6 +1,6 @@
 package com.bw.coupon.controller;
 
-import com.bw.coupon.annotation.IgnoreCommonResponseAdvice;
+import com.bw.coupon.annotation.IgnoreResponseAdvice;
 import com.bw.coupon.util.JacksonUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +36,7 @@ public class RibbonController {
 
     /** 通过Ribbon组件调用模板微服务 */
     @RequestMapping(value = "/info", method = RequestMethod.GET)    // */distribution/info
-    @IgnoreCommonResponseAdvice     //防止返回的Template又被包装一次
+    @IgnoreResponseAdvice     //防止返回的Template又被包装一次
     public TemplateInfo getTemplate(){
         String infoUrl = "http://coupon-template/template/info";
         return restTemplate.getForEntity(infoUrl, TemplateInfo.class).getBody();

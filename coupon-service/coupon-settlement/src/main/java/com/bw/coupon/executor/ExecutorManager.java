@@ -1,7 +1,7 @@
 package com.bw.coupon.executor;
 
 import com.bw.coupon.enumeration.CalculatingMethodEnum;
-import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.enumeration.RuleUnionEnum;
 import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.vo.SettlementInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ import java.util.Map;
 // 注意：BeanPostProcessor Bean后置处理器，是由Spring提供的接口
 public class ExecutorManager implements BeanPostProcessor {
     /** 规则执行器的映射 */
-    private static Map<RuleFlagEnum, RuleExecutor> executorIndex =
-            new HashMap<>(RuleFlagEnum.values().length);
+    private static Map<RuleUnionEnum, RuleExecutor> executorIndex =
+            new HashMap<>(RuleUnionEnum.values().length);
 
     /**
      * @Description: 优惠券结算规则入口
@@ -39,19 +39,19 @@ public class ExecutorManager implements BeanPostProcessor {
         List<SettlementInfo.CouponAndTemplateInfo> ctInfos = settlementInfo.getCouponAndTemplateInfos();
         // 单类优惠券
         if(ctInfos.size() == 1){
-            CalculatingMethodEnum discount = CalculatingMethodEnum.of(settlementInfo.getCouponAndTemplateInfos().
-                    get(0).getTemplate().getDiscount());
-            if(discount == CalculatingMethodEnum.MinusDiscount){
-                res = executorIndex.get(RuleFlagEnum.MinusDiscount).computeRule(settlementInfo);
+            CalculatingMethodEnum calculatingMethod = CalculatingMethodEnum.of(settlementInfo.getCouponAndTemplateInfos().
+                    get(0).getTemplateVo().getCalculatingMethodCode());
+            if(calculatingMethod == CalculatingMethodEnum.MinusCalculate){
+                res = executorIndex.get(RuleUnionEnum.MinusSingle).computeRule(settlementInfo);
             }
-            else if(discount == CalculatingMethodEnum.MultiplyDiscount){
-                res = executorIndex.get(RuleFlagEnum.MultiplyDiscount).computeRule(settlementInfo);
+            else if(calculatingMethod == CalculatingMethodEnum.MultiplyCalculate){
+                res = executorIndex.get(RuleUnionEnum.MultiplySingle).computeRule(settlementInfo);
             }
         }
         // 多类优惠券
         else if(ctInfos.size() == 2){
             // todo 判断是否两张正好是乘和减
-            res = executorIndex.get(RuleFlagEnum.MixDiscount).computeRule(settlementInfo);
+            res = executorIndex.get(RuleUnionEnum.MinusUnionMultiply).computeRule(settlementInfo);
         }
         else {
             throw new CommonException("Not Support For More Than 2 CouponTemplates");
@@ -66,14 +66,14 @@ public class ExecutorManager implements BeanPostProcessor {
         if(!(bean instanceof RuleExecutor))
             return bean;
         RuleExecutor executor = (RuleExecutor)bean;
-        RuleFlagEnum ruleFlagEnum = executor.ruleConfig();
+        RuleUnionEnum ruleUnionEnum = executor.ruleConfig();
 
-        if(executorIndex.containsKey(ruleFlagEnum)){
+        if(executorIndex.containsKey(ruleUnionEnum)){
             throw new IllegalStateException("The RuleExecutor for RuleFlag [" +
-                    ruleFlagEnum +
+                    ruleUnionEnum +
                     "] is already exist!");
         }
-        log.info("Load RuleExecutor {} for RuleFlag {}", executor.getClass(), ruleFlagEnum);
+        log.info("Load RuleExecutor {} for RuleFlag {}", executor.getClass(), ruleUnionEnum);
         return bean;
     }
 

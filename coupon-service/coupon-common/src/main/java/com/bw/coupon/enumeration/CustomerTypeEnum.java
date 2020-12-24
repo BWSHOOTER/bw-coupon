@@ -15,8 +15,9 @@ public enum CustomerTypeEnum {
     NewCustomer(921,"老用户"),
     OldCustomer(922,"新用户");
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
+
     public static CustomerTypeEnum of(Integer code){
         if(code==null)
             throw new IllegalArgumentException("Enum CustomerEnum code is NULL!");

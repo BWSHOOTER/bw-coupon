@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 public class TemplateCreatingRequestVo {
     private TemplateRuleVo rule;
     private Integer calculatingMethodCode;
-    private Integer goodsCategoryCode;
+    private String goodsCategoryCode;
 
     private Integer customerTypeCode;
     private Integer distributionMethodCode;
@@ -42,9 +42,7 @@ public class TemplateCreatingRequestVo {
         return StringValidate && enumValidate && countValidate && ruleVoValidate;
     }
 
-    /**
-     * 将 TemplateCreatingRequestVo 转换为 CouponTemplate实体
-     **/
+    /** 将 TemplateCreatingRequestVo 转换为 CouponTemplate实体 */
     public CouponTemplate toEntity(){
         return new CouponTemplate(
                 this.getDisplayName(),

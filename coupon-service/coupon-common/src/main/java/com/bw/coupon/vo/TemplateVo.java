@@ -39,6 +39,9 @@ public class TemplateVo {
     /** 适用用户 */
     private Integer customerTypeCode;
 
+    /** 分发总数 */
+    private Integer distributionAmount;
+
     /** 优惠券规则 */
     private TemplateRuleVo rule;
 }

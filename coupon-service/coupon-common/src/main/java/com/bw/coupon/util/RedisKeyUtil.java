@@ -6,33 +6,33 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class RedisKeyUtil {
     /**
-     * 根据 status 和userId 组装对应 Coupon 的 RedisKey
+     * 根据 status 和 userId 组装对应 Coupon 的 RedisKey
      */
-    public static String getCouponKeyByUserIdAndStatus(Long userId, Integer status){
+    public static String getCouponKeyByUserIdAndStatus(Long customerId, Integer status){
         String redisKey = null;
         CouponStatusEnum couponStatus = CouponStatusEnum.of(status);
         switch (couponStatus) {
             case USABLE:
                 redisKey = String.format("%s%s",
-                        Constant.RedisPrefix.USER_COUPON_USABLE, userId);
+                        Constant.RedisPrefix.CUSTOMER_COUPON_USABLE_PREFIX, customerId);
                 break;
             case USED:
                 redisKey = String.format("%s%s",
-                        Constant.RedisPrefix.USER_COUPON_USED, userId);
+                        Constant.RedisPrefix.CUSTOMER_COUPON_USED_PREFIX, customerId);
                 break;
             case EXPIRED:
                 redisKey = String.format("%s%s",
-                        Constant.RedisPrefix.USER_COUPON_EXPIRED, userId);
+                        Constant.RedisPrefix.CUSTOMER_COUPON_EXPIRED_PREFIX, customerId);
                 break;
         }
         return redisKey;
     }
 
     /**
-     * 根据templateId 组装 CouponTemplate的RedisKey
+     * 根据 templateId 组装 CouponTemplate 的 RedisKey
      */
     public static String getCouponTemplateKeyByTemplateId(Integer templateId){
-        return String.format("%s%s",Constant.RedisPrefix.COUPON_TEMPLATE,templateId.toString());
+        return String.format("%s%s",Constant.RedisPrefix.COUPON_TEMPLATE_PREFIX, templateId.toString());
     }
 
     /**

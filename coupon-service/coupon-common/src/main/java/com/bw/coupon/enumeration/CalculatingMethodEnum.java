@@ -6,41 +6,29 @@ import lombok.Getter;
 import java.util.stream.Stream;
 
 /**
- * 枚举：折扣规则类型
+ * 枚举：折扣计算方法
  */
 @Getter
 @AllArgsConstructor
 public enum CalculatingMethodEnum {
-    MinusDiscount(901,"减法折扣"),
-    MultiplyDiscount(902,"乘法折扣");
+    MinusCalculate(901,"减法计算折扣"),
+    MultiplyCalculate(902,"乘法计算折扣");
 
-    //一般通过一个值返回枚举，都叫of
+    private final Integer code;
+    private final String desc;
+
+    /** 一般通过一个值返回枚举，都叫of */
     public static CalculatingMethodEnum of(Integer code){
-        /*
-        //如果为空，则抛出一个异常
-        //尽早抛出 fail-fast思想
-        Objects.requireNonNull(code);
-         */
-
+        // Objects.requireNonNull(code);
         if(code==null)
             throw new IllegalArgumentException("Enum DiscountEnum code is NULL!");
-        /*
-        else if(code.equals(MinusDiscount.code))
-            return MinusDiscount;
-        else if(code.equals(MultiplyDiscount.code))
-            return MultiplyDiscount;
+        else if(code.equals(MinusCalculate.code))
+            return MinusCalculate;
+        else if(code.equals(MultiplyCalculate.code))
+            return MultiplyCalculate;
         else
-            throw new IllegalArgumentException("Enum DiscountEnum code is NOT EXISTS!");
-         */
-        return Stream.of(values())
-                .filter(bean -> bean.code.equals(code))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Enum DiscountEnum code " + code + " is NOT EXISTS!"));
+            throw new IllegalArgumentException("Enum CalculatingMethodEnum code " +
+                                               code +
+                                               " is NOT EXISTS!");
     }
-
-    private Integer code;
-    private String desc;
-
-
-
 }

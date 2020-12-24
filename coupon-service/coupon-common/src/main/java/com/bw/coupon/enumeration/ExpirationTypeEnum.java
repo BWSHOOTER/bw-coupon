@@ -14,8 +14,8 @@ public enum ExpirationTypeEnum {
     RegularExpiration(931,"固定"),
     ShiftExpiration(932,"变动");
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     public static ExpirationTypeEnum of(Integer code){
         if(code==null)

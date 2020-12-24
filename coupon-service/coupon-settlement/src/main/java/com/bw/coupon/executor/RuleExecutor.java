@@ -1,6 +1,6 @@
 package com.bw.coupon.executor;
 
-import com.bw.coupon.enumeration.RuleFlagEnum;
+import com.bw.coupon.enumeration.RuleUnionEnum;
 import com.bw.coupon.vo.SettlementInfo;
 
 /**
@@ -10,7 +10,7 @@ import com.bw.coupon.vo.SettlementInfo;
  */
 public interface RuleExecutor {
     /** 规则类型定义 */
-    RuleFlagEnum ruleConfig();
+    RuleUnionEnum ruleConfig();
 
     /**
      * @Description: 优惠券规则计算

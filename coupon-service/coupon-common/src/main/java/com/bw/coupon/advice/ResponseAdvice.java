@@ -1,7 +1,7 @@
 package com.bw.coupon.advice;
 
 
-import com.bw.coupon.annotation.IgnoreCommonResponseAdvice;
+import com.bw.coupon.annotation.IgnoreResponseAdvice;
 import com.bw.coupon.vo.CommonResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -15,17 +15,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * 对响应进行统一化增强处理
  */
 @RestControllerAdvice //@Documented + @ControllerAdvice + @ResponseBody
-public class CommonResponseAdvice implements ResponseBodyAdvice<Object> {
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     //判断是否需要对响应进行处理
     @Override
     @SuppressWarnings("all")
     public boolean supports(MethodParameter methodParameter,
                             Class<? extends HttpMessageConverter<?>> aClass) {
         //方法标识，不处理
-        if(methodParameter.getMethod().isAnnotationPresent(IgnoreCommonResponseAdvice.class))
+        if(methodParameter.getMethod().isAnnotationPresent(IgnoreResponseAdvice.class))
             return false;
         //类标识，不处理
-        else if(methodParameter.getDeclaringClass().isAnnotationPresent(IgnoreCommonResponseAdvice.class))
+        else if(methodParameter.getDeclaringClass().isAnnotationPresent(IgnoreResponseAdvice.class))
             return false;
         return true;
     }

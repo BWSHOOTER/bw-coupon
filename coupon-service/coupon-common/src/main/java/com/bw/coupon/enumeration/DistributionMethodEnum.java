@@ -14,8 +14,8 @@ public enum DistributionMethodEnum {
     SingleDistribute(911,"单用户领取"),
     MultiDistribute(912,"多用户群发");
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     public static DistributionMethodEnum of(Integer code){
         if(code==null)
