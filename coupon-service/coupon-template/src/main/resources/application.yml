@@ -1,8 +1,8 @@
 server:
   port: 7001
-  servlet:
-    # 微服务路径的前缀，zuul也靠此前缀进行区分微服务从而进行转发
-    context-path: /template
+  # servlet:
+    # 微服务路径的前缀
+    # context-path: /template
 
 spring:
   application:
@@ -62,6 +62,7 @@ eureka:
 #    version: 1.0-SNAPSHOT
 
 # ------------------------------------------------------------------------------------------------------
+
 logging:
   level:
     root: debug

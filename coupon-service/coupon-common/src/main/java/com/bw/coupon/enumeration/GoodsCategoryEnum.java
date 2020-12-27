@@ -58,4 +58,12 @@ public enum GoodsCategoryEnum {
         }
         return codes;
     }
+    /** 从code的列表还原出枚举的列表 */
+    public static List<GoodsCategoryEnum> getEnumsByCodes(List<Integer> codes){
+        List<GoodsCategoryEnum> enums = new ArrayList<>(codes.size());
+        for(int code: codes){
+            enums.add(GoodsCategoryEnum.of(code));
+        }
+        return enums;
+    }
 }

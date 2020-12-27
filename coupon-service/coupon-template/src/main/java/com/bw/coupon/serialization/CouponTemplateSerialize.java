@@ -1,6 +1,7 @@
 package com.bw.coupon.serialization;
 
 import com.bw.coupon.Entity.CouponTemplate;
+import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
         generator.writeStringField("calculatingMethod",
                 template.getCalculatingMethod().getDesc());
         generator.writeStringField("goodsCategory",
-                template.getGoodsCategory().getDesc());
+                GoodsCategoryEnum.listToCodesStr(template.getGoodsCategories()));
         generator.writeStringField("distributionAmount",
                 template.getDistributionAmount().toString());
         generator.writeStringField("createTime",

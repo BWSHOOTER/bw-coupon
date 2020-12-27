@@ -12,6 +12,7 @@ public class PreRequestFilter extends AbstractPreZuulFilter {
     @Override
     protected Object cRun() {
         requestContext.set(startTimeKey,System.currentTimeMillis());
+        log.info("[1. PreRequestFilter Pass!]");
         return success();
     }
 

@@ -30,7 +30,7 @@ public class ScheduledTask {
     @Scheduled(fixedRate = 60*60*1000)
     public void offlineCouponTemplate(){
         log.info("Start to Get Expired CouponTemplate");
-        List<CouponTemplate> templates = couponTemplateDao.findAllByExpired(false);
+        List<CouponTemplate> templates = couponTemplateDao.findAllByIsExpired(false);
         if(CollectionUtils.isEmpty(templates)){
             log.info("Done To Expire CouponTemplate: ExpiredTemplates is NULL.");
             return;

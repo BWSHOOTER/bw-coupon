@@ -34,13 +34,13 @@ public class CouponSerialize extends JsonSerializer<Coupon> {
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                         .format(coupon.getAssignTime()));
          */
-        generator.writeStringField("name", coupon.getTemplateVo().getName());
+        generator.writeStringField("name", coupon.getTemplateVo().getDisplayName());
         generator.writeStringField("logo", coupon.getTemplateVo().getLogo());
         generator.writeStringField("intro", coupon.getTemplateVo().getIntro());
         generator.writeStringField("expiration",
-                objectMapper.writeValueAsString(coupon.getTemplateVo().getRule().getExpiration()));
+                objectMapper.writeValueAsString(coupon.getTemplateVo().getRule().getExpirationRule()));
         generator.writeStringField("discount",
-                objectMapper.writeValueAsString(coupon.getTemplateVo().getRule().getDiscount()));
+                objectMapper.writeValueAsString(coupon.getTemplateVo().getRule().getCalculatingRule()));
 
         // 结束序列化
         generator.writeEndObject();

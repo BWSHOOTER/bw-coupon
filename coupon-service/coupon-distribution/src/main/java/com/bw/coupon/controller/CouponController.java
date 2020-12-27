@@ -60,8 +60,8 @@ public class CouponController {
     @RequestMapping(value = "/settlement", method = RequestMethod.POST)
     public SettlementInfo settlement(@RequestBody SettlementInfo settlementInfo)
         throws CommonException{
-        log.info("User [{}] Settlement [{}]",
-                settlementInfo.getUserId(), jackson.writeValueAsString(settlementInfo));
+        log.info("Customer [{}] Settlement [{}]",
+                settlementInfo.getCustomerId(), jackson.writeValueAsString(settlementInfo));
         return couponService.settlement(settlementInfo);
     }
 }

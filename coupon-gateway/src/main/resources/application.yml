@@ -15,23 +15,26 @@ eureka:
       register-with-eureka: true
 
 zuul:
+  # 前缀
   prefix: /bw-coupon-zuul
+
+  # 路由配置
   routes:
-    # 模板微服务 路由配置定义
     template:
-      # 网关只能通过路径进行转发
-      # 这里利用每个微服务application.yml中定义的不同前缀来区分
-      # 对应的ServiceId即为定义的微服务应用名称
+      # 网关只能通过路径进行转发。这里利用每个微服务application.yml中定义的不同前缀来区分。
       path: /template/**
+      # 对应的 ServiceId 为定义的微服务应用名称
       serviceId: coupon-template
-      # 转发是否需要跳过前缀
-      # 如果微服务中的mapping没有带上这里的前缀，则应为false
-      strip-prefix: false
-    # 分发微服务 路由配置定义
+      # 转发是否删除前缀。如果微服务中的mapping没有带上这里的前缀，则应为false。一般使用默认为True
+      # strip-prefix: false
+
     distruibution:
       path: /distribution/**
       serviceId: coupon-distribution
-      strip-prefix: false
+
+    settlement:
+      path: /settlement/**
+      serviceId: coupon-settlement
   host:
     # 连接微服务的超时时间
     connect-timeout-millis: 15000

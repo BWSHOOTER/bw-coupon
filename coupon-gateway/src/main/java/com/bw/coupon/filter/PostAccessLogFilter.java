@@ -22,7 +22,8 @@ public class PostAccessLogFilter extends AbstractPostZuulFilter {
         Long duration = System.currentTimeMillis() - startTime;
 
         //从网关通过的请求都会打印这条日志记录：uri + duration
-        log.info("uri: {}, duration: {}", uri, duration);
+        log.info("[5. PostAccessLogFilter Pass!] uri: {}, duration: {}.",
+                uri, duration);
 
         return success();
     }

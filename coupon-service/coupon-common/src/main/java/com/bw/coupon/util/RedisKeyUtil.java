@@ -32,7 +32,7 @@ public class RedisKeyUtil {
      * 根据 templateId 组装 CouponTemplate 的 RedisKey
      */
     public static String getCouponTemplateKeyByTemplateId(Integer templateId){
-        return String.format("%s%s",Constant.RedisPrefix.COUPON_TEMPLATE_PREFIX, templateId.toString());
+        return String.format("%s%s",Constant.RedisPrefix.COUPON_PREFIX, templateId.toString());
     }
 
     /**

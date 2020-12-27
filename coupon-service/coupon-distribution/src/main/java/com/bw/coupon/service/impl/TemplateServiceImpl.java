@@ -35,41 +35,41 @@ public class TemplateServiceImpl implements ITemplateService {
      * 4. 返回剩下的模板列表
      */
     @Override
-    public List<TemplateVo> findAvailableTemplateByUserId(Long userId) throws CommonException {
+    public List<TemplateVo> findAvailableTemplateByUserId(Long customerId) throws CommonException {
         // 1. 获取所有优惠券模板
         List<TemplateVo> unfilteredTemplateVos = templateFeignClient.findAllUsableTemplate().getData();
         log.debug("Find all Template From TemplateClient Count:{}", unfilteredTemplateVos.size());
 
         // 2. 过滤过期的优惠券模板
-        Map<Integer, TemplateVo> templateSdkMap = new HashMap<>(unfilteredTemplateVos.size());
-        for(TemplateVo sdk: unfilteredTemplateVos) {
-            if (!TemplateUtil.isExpiredByTemplateSDK(sdk)) {
-                templateSdkMap.put(sdk.getId(), sdk);
+        Map<Integer, TemplateVo> unExpiredTemplateVoMap = new HashMap<>(unfilteredTemplateVos.size());
+        for(TemplateVo templateVo: unfilteredTemplateVos) {
+            if (!templateVo.isExpired()) {
+                unExpiredTemplateVoMap.put(templateVo.getId(), templateVo);
             }
         }
-        log.info("Find Usable Template Count: {}", templateSdkMap.size());
+        log.info("Find Usable Template Count: {}", unExpiredTemplateVoMap.size());
 
         // 3. 获得用户已有的可用优惠券，并按模板分别统计已领取数目
-        List<Coupon> userUsableCoupons = couponService.findUserCouponsByStatus( userId, CouponStatusEnum.USABLE.getCode());
-        log.debug("Current User Has Usable Coupons: {}, {}", userId, userUsableCoupons.size());
-        Map<Integer, Integer> couponCount = new HashMap<>(userUsableCoupons.size());
-        for(Coupon coupon : userUsableCoupons){
+        List<Coupon> customerUsableCoupons = couponService.findUserCouponsByStatus(customerId, CouponStatusEnum.USABLE.getCode());
+        log.debug("Current Customer Has Usable Coupons: {}, {}", customerId, customerUsableCoupons.size());
+        Map<Integer, Integer> couponCount = new HashMap<>(customerUsableCoupons.size());
+        for(Coupon coupon : customerUsableCoupons){
             Integer templateId = coupon.getTemplateId();
             couponCount.put(templateId,couponCount.getOrDefault(templateId,0));
         }
 
         // 4. 剔除已达到当前用户领取上限的模板
         for(Integer key : couponCount.keySet()){
-            if(templateSdkMap.containsKey(key) &&
-                templateSdkMap.get(key).getRule().getLimitation() <= couponCount.get(key)){
-                templateSdkMap.remove(key);
+            if(unExpiredTemplateVoMap.containsKey(key) &&
+                    unExpiredTemplateVoMap.get(key).getDistributionAmount() <= couponCount.get(key)){
+                unExpiredTemplateVoMap.remove(key);
             }
         }
 
         // 5. 将剔除后的Map转为List并返回
-        List<TemplateVo> result = new ArrayList<>(templateSdkMap.size());
-        for(Integer id: templateSdkMap.keySet()){
-            result.add(templateSdkMap.get(id));
+        List<TemplateVo> result = new ArrayList<>(unExpiredTemplateVoMap.size());
+        for(Integer id: unExpiredTemplateVoMap.keySet()){
+            result.add(unExpiredTemplateVoMap.get(id));
         }
         return result;
     }

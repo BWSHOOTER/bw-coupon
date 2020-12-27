@@ -186,7 +186,7 @@ public class CouponServiceImpl implements ICouponService {
         TemplateVo templateVo = map.get(templateId);
 
         // 2. 判断此SDK是否过期
-        if(TemplateUtil.isExpiredByTemplateSDK(templateVo)){
+        if(templateVo.isExpired()){
             log.error("Template Expire: {}", templateId);
             throw new CommonException("Template Expire");
         }

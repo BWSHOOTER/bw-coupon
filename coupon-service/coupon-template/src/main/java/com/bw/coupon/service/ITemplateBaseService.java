@@ -21,7 +21,7 @@ public interface ITemplateBaseService {
     /**
      * 查找所有可用的优惠券模板
      */
-    List<TemplateVo> findAllUsableTemplate();
+    List<TemplateVo> findAllUsableTemplateVos();
 
     /**
      * 获取模板 ids 到 CouponTemplateVos 的映射

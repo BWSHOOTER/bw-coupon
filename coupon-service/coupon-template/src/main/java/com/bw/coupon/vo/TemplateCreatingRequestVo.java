@@ -1,6 +1,7 @@
 package com.bw.coupon.vo;
 
 import com.bw.coupon.Entity.CouponTemplate;
+import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 public class TemplateCreatingRequestVo {
     private TemplateRuleVo rule;
     private Integer calculatingMethodCode;
-    private String goodsCategoryCode;
+    private String goodsCategoryCodesStr;
 
     private Integer customerTypeCode;
     private Integer distributionMethodCode;
@@ -49,12 +50,12 @@ public class TemplateCreatingRequestVo {
                 this.getLogo(),
                 this.getIntro(),
                 this.getCalculatingMethodCode(),
-                this.getGoodsCategoryCode(),
-                this.getDistributionAmount(),
-                this.getCreatorId(),
+                GoodsCategoryEnum.of(this.getGoodsCategoryCodesStr()),
                 this.getDistributionMethodCode(),
+                this.getDistributionAmount(),
                 this.getCustomerTypeCode(),
-                this.getRule()
+                this.getRule(),
+                this.getCreatorId()
         );
     }
 }

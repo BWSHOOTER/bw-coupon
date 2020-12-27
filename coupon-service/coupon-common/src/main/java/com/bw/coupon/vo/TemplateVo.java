@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * 微服务之间用的优惠券模板信息定义
  *
- * 比起实体，少了是否生效、是否过期、分发总数、创建时间、创建人员id、发放方式
+ * 比起实体，少了是否生效、是否过期、创建时间、创建人员id、发放方式
  */
 @Data
 @AllArgsConstructor
@@ -39,9 +40,18 @@ public class TemplateVo {
     /** 适用用户 */
     private Integer customerTypeCode;
 
+    /** 分发方式 */
+    private Integer distributionMethodCode;
+
     /** 分发总数 */
     private Integer distributionAmount;
 
     /** 优惠券规则 */
     private TemplateRuleVo rule;
+
+    /** 判断TemplateSDK是否过期 */
+    public boolean isExpired(){
+        long curDate = new Date().getTime();
+        return curDate > this.getRule().getExpirationRule().getDeadLine();
+    }
 }

@@ -19,7 +19,7 @@ public class PreRateLimiterFilter extends AbstractPreZuulFilter {
     protected Object cRun() {
         HttpServletRequest httpServletRequest = requestContext.getRequest();
         if(rateLimiter.tryAcquire()){
-            log.info("get rate token success");
+            log.info("[3. Get rate token success!]");
             return success();
         }
         else{

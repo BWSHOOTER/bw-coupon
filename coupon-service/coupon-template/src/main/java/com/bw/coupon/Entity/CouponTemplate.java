@@ -6,7 +6,9 @@ import com.bw.coupon.enumeration.CalculatingMethodEnum;
 import com.bw.coupon.enumeration.DistributionMethodEnum;
 import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import com.bw.coupon.serialization.CouponTemplateSerialize;
+import com.bw.coupon.vo.TemplateCreatingRequestVo;
 import com.bw.coupon.vo.TemplateRuleVo;
+import com.bw.coupon.vo.TemplateVo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -103,33 +105,68 @@ public class CouponTemplate implements Serializable {
     private TemplateRuleVo rule;
 
     /**
-     * 自定义构造函数
-     * */
+     * 自定义构造函数：基于 TemplateCreatingRequestVo 的字段
+     **/
     public CouponTemplate(String displayName,
                           String logo,
                           String intro,
-                          Integer calculating_method_code,
-                          String goods_category_codes,
-                          Integer distribution_amount,
-                          Long creatorId,
-                          Integer distribution_method_code,
-                          Integer customer_type_code,
-                          TemplateRuleVo rule) {
+                          Integer calculatingMethodCode,
+                          List<GoodsCategoryEnum> goodsCategories,
+                          Integer distributionMethodCode,
+                          Integer distributionAmount,
+                          Integer customerTypeCode,
+                          TemplateRuleVo rule,
+                          Long creatorId) {
         this.isAvailable = false;
         this.isExpired = false;
         this.displayName = displayName;
         this.logo = logo;
         this.intro = intro;
-        this.calculatingMethod = CalculatingMethodEnum.of(calculating_method_code);
-        this.goodsCategories = GoodsCategoryEnum.of(goods_category_codes);
-        this.distributionAmount = distribution_amount;
-        this.creatorId = creatorId;
-        this.distributionMethod = DistributionMethodEnum.of(distribution_method_code);
-        this.customerType = CustomerTypeEnum.of(customer_type_code);
+        this.calculatingMethod = CalculatingMethodEnum.of(calculatingMethodCode);
+        this.goodsCategories = goodsCategories;
+        this.distributionAmount = distributionAmount;
+        this.distributionMethod = DistributionMethodEnum.of(distributionMethodCode);
+        this.customerType = CustomerTypeEnum.of(customerTypeCode);
         this.rule = rule;
+        this.creatorId = creatorId;
 
         // todo 优惠券模板唯一编码 = 折扣计算方式 + 8(日期: 19010115) + id(扩充为4位)
-        this.sn = calculating_method_code +
+        this.sn = calculatingMethodCode +
                 new SimpleDateFormat("yyyyMMdd").format(new Date()) + "0000";
+    }
+
+    /*
+    public CouponTemplate(TemplateCreatingRequestVo request){
+        this.isAvailable = false;
+        this.isExpired = false;
+        this.displayName = request.getDisplayName();
+        this.logo = request.getLogo();
+        this.intro = request.getIntro();
+        this.calculatingMethod = CalculatingMethodEnum.of(request.getCalculatingMethodCode());
+        this.goodsCategories = GoodsCategoryEnum.of(request.getGoodsCategoryCodesStr());
+        this.distributionAmount = request.getDistributionAmount();
+        this.distributionMethod = DistributionMethodEnum.of(request.getDistributionMethodCode());
+        this.customerType = CustomerTypeEnum.of(request.getCustomerTypeCode());
+        this.rule = request.getRule();
+        this.creatorId = request.getCreatorId();
+    }
+     */
+
+    /** 将 CouponTemplate 转换为 TemplateVo */
+    public TemplateVo toVo(){
+        return new TemplateVo(
+                this.getId(),
+                this.getDisplayName(),
+                this.getLogo(),
+                this.getIntro(),
+                this.getCalculatingMethod().getCode(),
+                GoodsCategoryEnum.getCodesByEnums(this.getGoodsCategories()),
+                // 并不是拼装好的 Template Key
+                this.getSn(),
+                this.getCustomerType().getCode(),
+                this.getDistributionMethod().getCode(),
+                this.getDistributionAmount(),
+                this.getRule()
+        );
     }
 }

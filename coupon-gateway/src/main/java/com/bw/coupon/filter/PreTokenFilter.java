@@ -2,7 +2,6 @@ package com.bw.coupon.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import com.bw.coupon.filter.abst.AbstractPreZuulFilter;
-import org.apache.commons.logging.Log;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +23,10 @@ public class PreTokenFilter extends AbstractPreZuulFilter {
             log.error("error: token is empty");
             return fail(401,"error: token is empty");
         }
-        if(isTokenPass(token))
+        if(isTokenPass(token)){
+            log.info("[2. PreTokenFilter Success!]");
             return success();
+        }
         else
             return fail(402,"error: token is not pass");
     }

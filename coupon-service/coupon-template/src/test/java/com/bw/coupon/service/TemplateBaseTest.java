@@ -16,17 +16,20 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class TemplateBaseTest {
     private final ITemplateBaseService templateBaseService;
+    private final ITemplateCreatingService templateCreatingService;
     private final JacksonUtil jacksonUtil;
 
     @Autowired
-    public TemplateBaseTest(ITemplateBaseService templateBaseService, JacksonUtil jacksonUtil) {
+    public TemplateBaseTest(ITemplateBaseService templateBaseService, JacksonUtil jacksonUtil,
+                            ITemplateCreatingService templateCreatingService) {
         this.templateBaseService = templateBaseService;
         this.jacksonUtil = jacksonUtil;
+        this.templateCreatingService = templateCreatingService;
     }
-
+/*
     @Test
     public void testBuildTemplateInfo() throws CommonException{
-        System.out.println(jacksonUtil.writeValueAsString(templateBaseService.buildTemplateInfo(12)));
+        System.out.println(jacksonUtil.writeValueAsString(templateCreatingService.createCouponTemplate(12)));
         //System.out.println(JSON.toJSONString(templateBaseService.buildTemplateInfo(2)));
     }
 
@@ -42,4 +45,6 @@ public class TemplateBaseTest {
         list.add(2);
         System.out.println(jacksonUtil.writeValueAsString(templateBaseService.findIds2TemplateSDK(list)));
     }
+
+ */
 }

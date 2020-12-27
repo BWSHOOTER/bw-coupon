@@ -13,11 +13,11 @@ import java.util.List;
 public interface CouponTemplateDao
         extends JpaRepository<CouponTemplate, Integer> {
     /** 根据模板名称查询模板 */
-    CouponTemplate findByName(String name);
+    CouponTemplate findByDisplayName(String displayName);
     /** 根据available、expired查询模板 */
-    List<CouponTemplate> findAllByAvailableAndExpired(Boolean available, Boolean expired);
+    List<CouponTemplate> findAllByIsAvailableAndIsExpired(Boolean available, Boolean expired);
     /** 根据expired查询模板 */
-    List<CouponTemplate> findAllByExpired(Boolean expired);
+    List<CouponTemplate> findAllByIsExpired(Boolean expired);
 
     /** 储存模板信息 */
     CouponTemplate save(CouponTemplate template);

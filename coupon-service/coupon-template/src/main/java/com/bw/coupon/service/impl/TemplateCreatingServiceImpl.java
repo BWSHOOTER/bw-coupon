@@ -42,7 +42,7 @@ public class TemplateCreatingServiceImpl implements ITemplateCreatingService {
             throw new CommonException("BuildTemplate Param Is Not Valid!");
         }
         // 2. 判断同名的优惠券模板是否存在
-        if (null != templateDao.findByName(request.getDisplayName())) {
+        if (null != templateDao.findByDisplayName(request.getDisplayName())) {
             throw new CommonException("Exist Same Name Template!");
         }
         // 3. 根据 request 构造 CouponTemplate

@@ -31,10 +31,10 @@ public class TemplateController {
 
     /**
      * 1. 构建优惠券模板
-     *      原地址：127.0.0.1:7001/coupon-template/template/build
-     *      转发地址：127.0.0.1:9000/bw-coupon-zuul/coupon-template/template/build
+     *      原地址：127.0.0.1:7001/template/build
+     *      转发地址：127.0.0.1:9000/template/build
      */
-    @PostMapping("/template/build")
+    @PostMapping("/build")
     public CouponTemplate buildTemplate(@RequestBody TemplateCreatingRequestVo request)
             throws CommonException {
         log.info("Build Template: {}", jackson.writeValueAsString(request));
@@ -59,7 +59,7 @@ public class TemplateController {
     @GetMapping("/template/sdk/all")
     public List<TemplateVo> findAllUsableTemplate() {
         log.info("Find All Usable Template.");
-        return templateBaseService.findAllUsableTemplate();
+        return templateBaseService.findAllUsableTemplateVos();
     }
 
     /**

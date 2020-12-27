@@ -2,7 +2,6 @@ package com.bw.coupon.service.impl;
 
 import com.bw.coupon.Entity.CouponTemplate;
 import com.bw.coupon.dao.CouponTemplateDao;
-import com.bw.coupon.enumeration.GoodsCategoryEnum;
 import com.bw.coupon.vo.CommonException;
 import com.bw.coupon.service.ITemplateBaseService;
 import com.bw.coupon.vo.TemplateVo;
@@ -10,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,15 +39,16 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
     }
 
     /**
-     * 查找所有可用（且未过期）的优惠券模板
+     * 查找所有可用（且未过期）的优惠券模板Vo
      */
     @Override
-    public List<TemplateVo> findAllUsableTemplate() {
-        List<CouponTemplate> templates =
-                templateDao.findAllByAvailableAndExpired(
-                        true, false);
-        return templates.stream()
-                .map(this::templateEntityToVo).collect(Collectors.toList());
+    public List<TemplateVo> findAllUsableTemplateVos() {
+        List<CouponTemplate> templates = templateDao.findAllByIsAvailableAndIsExpired(true, false);
+        List<TemplateVo> vos = new ArrayList<>(templates.size());
+        for(CouponTemplate template: templates){
+            vos.add(template.toVo());
+        }
+        return vos;
     }
 
     /**
@@ -60,24 +57,9 @@ public class TemplateBaseServiceImpl implements ITemplateBaseService {
     @Override
     public Map<Integer, TemplateVo> findIds2TemplateVos(Collection<Integer> ids) {
         List<CouponTemplate> templates = templateDao.findAllById(ids);
-        return templates.stream().map(this::templateEntityToVo)
+        return templates.stream().map(CouponTemplate::toVo)
                 .collect(Collectors.toMap(
                         TemplateVo::getId, Function.identity()
                 ));
-    }
-
-    /** 将 CouponTemplate 转换为 TemplateVo */
-    private TemplateVo templateEntityToVo(CouponTemplate template) {
-        return new TemplateVo(
-                template.getId(),
-                template.getDisplayName(),
-                template.getLogo(),
-                template.getIntro(),
-                template.getCalculatingMethod().getCode(),
-                GoodsCategoryEnum.getCodesByEnums(template.getGoodsCategories()),
-                template.getSn(),                       // 并不是拼装好的 Template Key
-                template.getCustomerType().getCode(),
-                template.getRule()
-        );
     }
 }

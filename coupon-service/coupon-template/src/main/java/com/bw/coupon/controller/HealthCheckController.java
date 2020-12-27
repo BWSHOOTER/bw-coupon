@@ -38,8 +38,9 @@ public class HealthCheckController {
 
     /**
      * 健康检查接口
-     * 127.0.0.1:7001/coupon-template/health
+     * 127.0.0.1:7001/template/health
      * 127.0.0.1:9000/bw-coupon-zuul/template/health
+     * http://127.0.0.1:9000/template/health?token=456
      */
     @GetMapping("/health")
     public String health(){
@@ -49,7 +50,7 @@ public class HealthCheckController {
 
     /**
      * 异常检查接口
-     * 127.0.0.1:7001/coupon-template/exception
+     * 127.0.0.1:7001/template/exception
      */
     @GetMapping("/exception")
     public String exception() throws CommonException{
