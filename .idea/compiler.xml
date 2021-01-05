@@ -7,12 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="coupon-eureka" />
+        <module name="module-gateway" />
+        <module name="permission-common" />
         <module name="coupon-template" />
-        <module name="coupon-settlement" />
-        <module name="coupon-distribution" />
-        <module name="coupon-gateway" />
+        <module name="permission-service" />
         <module name="coupon-common" />
+        <module name="coupon-distribution" />
+        <module name="coupon-settlement" />
+        <module name="module-eureka" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,11 +22,14 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="coupon-common" options="-parameters" />
       <module name="coupon-distribution" options="-parameters" />
-      <module name="coupon-eureka" options="-parameters" />
-      <module name="coupon-gateway" options="-parameters" />
-      <module name="coupon-service" options="-parameters" />
       <module name="coupon-settlement" options="-parameters" />
       <module name="coupon-template" options="-parameters" />
+      <module name="module-coupon" options="-parameters" />
+      <module name="module-eureka" options="-parameters" />
+      <module name="module-gateway" options="-parameters" />
+      <module name="module-permission" options="-parameters" />
+      <module name="permission-common" options="-parameters" />
+      <module name="permission-service" options="-parameters" />
     </option>
   </component>
 </project>

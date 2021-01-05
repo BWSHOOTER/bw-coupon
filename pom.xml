@@ -11,9 +11,10 @@
 
     <!-- 有子模块后自动生成 -->
     <modules>
-        <module>coupon-eureka</module>
-        <module>coupon-gateway</module>
-        <module>coupon-service</module>
+        <module>module-eureka</module>
+        <module>module-gateway</module>
+        <module>module-coupon</module>
+        <module>module-permission</module>
     </modules>
 
     <!--2.项目名称和描述（非必选）-->
