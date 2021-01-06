@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OperationCreateRequest {
+public class OperationRegisterRequest {
     private List<OperationInfo> operationInfos;
 
     @Data

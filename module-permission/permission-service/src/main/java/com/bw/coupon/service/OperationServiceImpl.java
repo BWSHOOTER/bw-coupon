@@ -2,59 +2,58 @@ package com.bw.coupon.service;
 
 import com.bw.coupon.dao.OperationDao;
 import com.bw.coupon.entity.Operation;
-import com.bw.coupon.vo.OperationCreateRequest;
+import com.bw.coupon.vo.OperationRegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import com.bw.coupon.vo.OperationCreateRequest.OperationInfo;
+import com.bw.coupon.vo.OperationRegisterRequest.OperationInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @Description: 权限注册 服务
+ * @Author: BaoWei
+ * @Date: 2021/01/06 10:49
+ */
 @Slf4j
 @Service
-public class OperationServiceImpl {
+public class OperationServiceImpl implements IOperationService{
     private final OperationDao operationDao;
 
+    @Autowired
     public OperationServiceImpl(OperationDao operationDao) {
         this.operationDao = operationDao;
     }
 
-    /**
-     * @Description: 批量存储操作到数据库
-     * @Author: BaoWei
-     * @Date: 2021/01/06 2:08
-     */
-    public List<Integer> createOperations(OperationCreateRequest request){
-        List<OperationInfo> operationInfos = request.getOperationInfos();
-        String tarServiceName = operationInfos.get(0).getRequestService();
-        List<OperationInfo> validInfos = new ArrayList<>(operationInfos.size());
+    /** 批量存储操作到数据库 */
+    public List<Integer> registerOperations(OperationRegisterRequest request){
+        List<OperationInfo> requestOperationInfos = request.getOperationInfos();
+        String tarServiceName = requestOperationInfos.get(0).getRequestService();
         List<Operation> currentOperations = operationDao.findAllByRequestService(tarServiceName);
+        List<OperationInfo> validInfos = new ArrayList<>(requestOperationInfos.size());
 
         // 校验请求添加的操作与已有操作有没有重复
-        if(!CollectionUtils.isEmpty(currentOperations)){
-            for(OperationInfo opInfo: operationInfos){
-                boolean isValid = true;
-
-                for(Operation op: currentOperations){
-                    if(op.getRequestPath().equals(opInfo.getRequestPath()) &&
-                    op.getHttpMethod().equals(opInfo.getHttpMethod())){
-                        isValid = false;
-                        break;
-                    }
-                }
-                if(isValid){
-                    validInfos.add(opInfo);
+        for(OperationInfo opInfo: requestOperationInfos){
+            boolean isValid = true;
+            for(Operation op: currentOperations){
+                if(op.getRequestPath().equals(opInfo.getRequestPath()) &&
+                        op.getHttpMethod().equals(opInfo.getHttpMethod())){
+                    isValid = false;
+                    break;
                 }
             }
+            if(isValid){
+                validInfos.add(opInfo);
+            }
         }
-        else{
-            validInfos.addAll(operationInfos);
-        }
-        // 转换
+
+        // OperationInfo 转换成 Operation
         List<Operation> operations = new ArrayList<>();
+        for(OperationInfo info: validInfos){
+            operations.add(new Operation(info));
+        }
 
         return operationDao.saveAll(operations).stream().map(Operation::getId).collect(Collectors.toList());
     }

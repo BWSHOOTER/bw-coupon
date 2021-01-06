@@ -1,5 +1,6 @@
 package com.bw.coupon.entity;
 
+import com.bw.coupon.vo.OperationRegisterRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,5 +45,13 @@ public class Operation {
         this.requestService = requestService;
         this.requestPath = requestPath;
         this.httpMethod = httpMethod;
+    }
+
+    public Operation(OperationRegisterRequest.OperationInfo info){
+        this.opDes = info.getOperationDes();
+        this.opMode = info.getOperationMode();
+        this.requestService = info.getRequestService();
+        this.requestPath = info.getRequestPath();
+        this.httpMethod = info.getHttpMethod();
     }
 }

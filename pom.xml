@@ -15,6 +15,7 @@
         <module>module-gateway</module>
         <module>module-coupon</module>
         <module>module-permission</module>
+        <module>module-common</module>
     </modules>
 
     <!--2.项目名称和描述（非必选）-->
